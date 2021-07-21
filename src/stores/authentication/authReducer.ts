@@ -1,29 +1,37 @@
 import { ActionTypes, Action } from './actions/types';
 
-export type AuthState = {
+export type AuthStateType = {
     token: string;
-    id: number | null;
-    email: string;
+    id?: number | null;
+    email?: string;
+    isLogged: boolean;
 };
 
 const initialState = {
     token: '',
     id: null,
     email: '',
+    isLogged: false,
 };
 
-const authReducer = (state: AuthState = initialState, action: Action): AuthState => {
+const authReducer = (state: AuthStateType = initialState, action: Action): AuthStateType => {
+    console.log('ACTION:', action);
+    console.log('STAte', state);
     switch (action.type) {
-        case ActionTypes.registerSuccess:
+        case ActionTypes.authenticateSuccess:
+        case ActionTypes.loadCurrentUser:
             return {
                 ...state,
                 token: action.payload.token,
                 id: action.payload.id,
                 email: action.payload.email,
+                isLogged: true,
             };
-        case ActionTypes.registerFail:
+        case ActionTypes.authenticateFail:
+        case ActionTypes.logout:
             return {
                 ...state,
+                isLogged: false,
             };
         default:
             return state;

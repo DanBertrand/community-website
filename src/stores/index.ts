@@ -1,12 +1,17 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import authReducer, { AuthState } from './authentication/authReducer';
+import authReducer from './authentication/authReducer';
 
-interface StoreState {
-    auth: AuthState;
+export interface StoreStateType {
+    auth: {
+        token: string;
+        id?: number | null;
+        email?: string;
+        isLogged: boolean;
+    };
 }
 
-const reducers = combineReducers<StoreState>({
+const reducers = combineReducers<StoreStateType>({
     auth: authReducer,
 });
 

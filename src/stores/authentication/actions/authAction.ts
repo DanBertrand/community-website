@@ -3,28 +3,51 @@ import { ActionTypes } from './types';
 
 export type Data = {
     token: string;
-    id: number;
-    email: string;
+    id?: number;
+    email?: string;
 };
 
-export type RegisterSuccessAction = {
-    type: ActionTypes.registerSuccess;
+export type AuthenticateSuccessAction = {
+    type: ActionTypes.authenticateSuccess;
     payload: Data;
 };
 
-export type RegisterFailAction = {
-    type: ActionTypes.registerFail;
+export type AuthenticateFailAction = {
+    type: ActionTypes.authenticateFail;
 };
 
-export const registerSuccess = (data: Data): RegisterSuccessAction => {
+export type LoadCurrentUserAction = {
+    type: ActionTypes.loadCurrentUser;
+    payload: Data;
+};
+
+export type LogoutAction = {
+    type: ActionTypes.logout;
+};
+
+export const authenticateSuccess = (data: Data): AuthenticateSuccessAction => {
+    console.log('AuthenticateSuccessAction DATA:', data);
     return {
-        type: ActionTypes.registerSuccess,
+        type: ActionTypes.authenticateSuccess,
         payload: data,
     };
 };
 
-export const registerFail = (): RegisterFailAction => {
+export const authenticateFail = (): AuthenticateFailAction => {
     return {
-        type: ActionTypes.registerFail,
+        type: ActionTypes.authenticateFail,
+    };
+};
+
+export const loadCurrentUser = (data: Data): LoadCurrentUserAction => {
+    return {
+        type: ActionTypes.loadCurrentUser,
+        payload: data,
+    };
+};
+
+export const logout = (): LogoutAction => {
+    return {
+        type: ActionTypes.logout,
     };
 };

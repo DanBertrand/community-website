@@ -1,8 +1,10 @@
-import { RegisterSuccessAction, RegisterFailAction } from './authAction';
+import { AuthenticateFailAction, AuthenticateSuccessAction, LoadCurrentUserAction, LogoutAction } from './authAction';
 
 export enum ActionTypes {
-    registerSuccess,
-    registerFail,
+    authenticateSuccess,
+    authenticateFail,
+    loadCurrentUser,
+    logout,
 }
 
-export type Action = RegisterSuccessAction | RegisterFailAction;
+export type Action = AuthenticateSuccessAction | AuthenticateFailAction | LoadCurrentUserAction | LogoutAction;
