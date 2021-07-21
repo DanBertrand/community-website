@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Navbar from './components/layout/Navbar';
 // import styled from 'styled-components';
 // import mainImage from './assets/images/main-image.jpg';
@@ -8,15 +8,30 @@ import Home from './pages/Home';
 import { StoreStateType } from './stores/index';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './pages/authentications/Login';
+import Cookies from 'js-cookie';
+import { fetchCurrentUser } from './stores/authentication/authMiddleware';
 
 const App: React.FC = () => {
-    const state = useSelector((state: StoreStateType) => state.auth);
-    console.log('Store', state);
+    const { isLogged } = useSelector((state: StoreStateType) => state.auth);
+    const dispatch = useDispatch();
+
+    const autoLogin = async () => {
+        const token = Cookies.get('token');
+        if (!isLogged && token) {
+            dispatch(fetchCurrentUser(token));
+        }
+    };
+
+    useEffect(() => {
+        autoLogin();
+    }, [isLogged]);
 
     return (
         <Router>
             <Navbar />
-            <Home />
+            <Route path="/" exact>
+                <Home />
+            </Route>
             <Switch>
                 <Route path="/register">
                     <Register />
