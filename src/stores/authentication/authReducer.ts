@@ -15,8 +15,6 @@ const initialState = {
 };
 
 const authReducer = (state: AuthStateType = initialState, action: Action): AuthStateType => {
-    console.log('ACTION:', action);
-    console.log('STAte', state);
     switch (action.type) {
         case ActionTypes.authenticateSuccess:
         case ActionTypes.loadCurrentUser:
