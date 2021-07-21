@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchToRegister } from '../../stores/authentication/authMiddleware';
 import * as Yup from 'yup';
 import { Formik, Field, Form } from 'formik';
+import { StoreStateType } from '../../stores';
+import { useHistory } from 'react-router-dom';
 
 type Values = {
     email: string;
@@ -11,14 +13,19 @@ type Values = {
 
 const Register: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const history = useHistory();
 
+    const state = useSelector((state: StoreStateType) => state.auth);
     const dispatch = useDispatch();
+    console.log('Store', state);
 
     const register = async (values: Values) => {
         const data = {
             user: values,
         };
-        dispatch(fetchToRegister(data));
+        if (await dispatch(fetchToRegister(data))) {
+            history.push('/');
+        }
     };
 
     const RegisterSchema = Yup.object().shape({
