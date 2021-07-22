@@ -1,5 +1,10 @@
 # Community Connector
 
+
+| :warning: WARNING          |
+|:---------------------------|
+| Project in development     |
+
 In between the woofing and Airbnb concept, Community allow you to register as a community or normal user
 The communities can offer place to stay in exchange of money or some work at the place
 
