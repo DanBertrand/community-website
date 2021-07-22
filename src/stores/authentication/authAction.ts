@@ -1,4 +1,3 @@
-// import * as actionTypes from '../authTypes';
 import { AuthActionTypes } from './authActionTypes';
 
 export type Data = {
