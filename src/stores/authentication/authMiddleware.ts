@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
-import { authenticateFail, authenticateSuccess, loadCurrentUser, logout } from './actions/authAction';
+import { authenticateFail, authenticateSuccess, loadCurrentUser, logout } from './authAction';
 import { Dispatch } from 'redux';
+import { flashSuccess, flashError } from '../flashmessages/flashAction';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -26,22 +27,30 @@ export const fetchToRegister = (data: Data) => {
                 },
                 body: JSON.stringify(data),
             });
+            console.log('Response', response);
+
             if (!response.ok) {
+                console.log('REPONSE PAS OK');
                 const dataError = await response.json();
                 dispatch(authenticateFail());
                 Cookies.remove('token');
+                dispatch(flashError(`Email ${dataError.errors[0].detail.email[0]}`));
                 console.log('Une erreur est survenue:', dataError);
+
                 return false;
             }
+            console.log('Response', response);
             const token = response.headers.get('authorization')?.split(' ')[1] || '';
             Cookies.set('token', token);
             const user: User = await response.json();
             const { id, email } = user;
             const userToRegister = { token, id, email };
             dispatch(authenticateSuccess(userToRegister));
+            dispatch(flashSuccess('You account has been created !!'));
             return true;
         } catch (error) {
             console.log(error);
+            dispatch(flashError(error.messages));
             return false;
         }
     };
@@ -61,6 +70,7 @@ export const fetchToLogin = (data: Data) => {
                 const dataError = await response.json();
                 dispatch(authenticateFail());
                 Cookies.remove('token');
+                dispatch(flashError(dataError.errors[0].detail));
                 console.log('Une erreur est survenue:', dataError);
                 return false;
             }
@@ -70,6 +80,7 @@ export const fetchToLogin = (data: Data) => {
             const { id, email } = user;
             const userToRegister = { token, id, email };
             dispatch(authenticateSuccess(userToRegister));
+            dispatch(flashSuccess('Logged successfully !!'));
             return true;
         } catch (error) {
             console.log(error);
@@ -88,6 +99,7 @@ export const fetchToLogout = (token: string) => {
             },
         }).then(() => {
             dispatch(logout()), Cookies.remove('token');
+            dispatch(flashSuccess('Logged out successfully'));
         });
     };
 };
