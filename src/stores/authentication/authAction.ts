@@ -1,5 +1,4 @@
-// import * as actionTypes from '../authTypes';
-import { ActionTypes } from './types';
+import { AuthActionTypes } from './authActionTypes';
 
 export type Data = {
     token: string;
@@ -8,46 +7,46 @@ export type Data = {
 };
 
 export type AuthenticateSuccessAction = {
-    type: ActionTypes.authenticateSuccess;
+    type: AuthActionTypes.authenticateSuccess;
     payload: Data;
 };
 
 export type AuthenticateFailAction = {
-    type: ActionTypes.authenticateFail;
+    type: AuthActionTypes.authenticateFail;
 };
 
 export type LoadCurrentUserAction = {
-    type: ActionTypes.loadCurrentUser;
+    type: AuthActionTypes.loadCurrentUser;
     payload: Data;
 };
 
 export type LogoutAction = {
-    type: ActionTypes.logout;
+    type: AuthActionTypes.logout;
 };
 
 export const authenticateSuccess = (data: Data): AuthenticateSuccessAction => {
     console.log('AuthenticateSuccessAction DATA:', data);
     return {
-        type: ActionTypes.authenticateSuccess,
+        type: AuthActionTypes.authenticateSuccess,
         payload: data,
     };
 };
 
 export const authenticateFail = (): AuthenticateFailAction => {
     return {
-        type: ActionTypes.authenticateFail,
+        type: AuthActionTypes.authenticateFail,
     };
 };
 
 export const loadCurrentUser = (data: Data): LoadCurrentUserAction => {
     return {
-        type: ActionTypes.loadCurrentUser,
+        type: AuthActionTypes.loadCurrentUser,
         payload: data,
     };
 };
 
 export const logout = (): LogoutAction => {
     return {
-        type: ActionTypes.logout,
+        type: AuthActionTypes.logout,
     };
 };

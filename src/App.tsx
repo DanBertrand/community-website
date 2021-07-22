@@ -10,17 +10,21 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './pages/authentications/Login';
 import Cookies from 'js-cookie';
 import { fetchCurrentUser } from './stores/authentication/authMiddleware';
+import FlashMessage from './components/layout/FlashMessages';
 
 const App: React.FC = () => {
     const { isLogged } = useSelector((state: StoreStateType) => state.auth);
+    const flash = useSelector((state: StoreStateType) => state.flash);
     const dispatch = useDispatch();
 
     const autoLogin = async () => {
         const token = Cookies.get('token');
+
         if (!isLogged && token) {
             dispatch(fetchCurrentUser(token));
         }
     };
+    console.log('FLASH STORE', flash);
 
     useEffect(() => {
         autoLogin();
@@ -29,6 +33,7 @@ const App: React.FC = () => {
     return (
         <Router>
             <Navbar />
+            <FlashMessage />
             <Route path="/" exact>
                 <Home />
             </Route>
