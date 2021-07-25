@@ -4,6 +4,7 @@ export type ShowFlashAction = {
     type: string;
     category: string;
     content: string;
+    color: string;
 };
 
 export type RemoveFlashAction = {
@@ -15,6 +16,7 @@ export const flashSuccess = (message: string): ShowFlashAction => {
         type: FLASH_SUCCESS,
         category: 'success',
         content: message,
+        color: 'green',
     };
 };
 
@@ -23,6 +25,7 @@ export const flashError = (message: string): ShowFlashAction => {
         type: FLASH_ERROR,
         category: 'danger',
         content: message,
+        color: 'red',
     };
 };
 
