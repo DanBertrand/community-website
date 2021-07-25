@@ -11,10 +11,12 @@ import Login from './pages/authentications/Login';
 import Cookies from 'js-cookie';
 import { fetchCurrentUser } from './stores/authentication/authMiddleware';
 import FlashMessage from './components/layout/FlashMessages';
+import { ThemeProvider } from 'styled-components';
+import { lightTheme } from './styles/themes';
 
 const App: React.FC = () => {
     const { isLogged } = useSelector((state: StoreStateType) => state.auth);
-    const flash = useSelector((state: StoreStateType) => state.flash);
+
     const dispatch = useDispatch();
 
     const autoLogin = async () => {
@@ -24,28 +26,29 @@ const App: React.FC = () => {
             dispatch(fetchCurrentUser(token));
         }
     };
-    console.log('FLASH STORE', flash);
 
     useEffect(() => {
         autoLogin();
     }, [isLogged]);
 
     return (
-        <Router>
-            <Navbar />
-            <FlashMessage />
-            <Route path="/" exact>
-                <Home />
-            </Route>
-            <Switch>
-                <Route path="/register">
-                    <Register />
+        <ThemeProvider theme={lightTheme}>
+            <Router>
+                <Navbar />
+                <FlashMessage />
+                <Route path="/" exact>
+                    <Home />
                 </Route>
-                <Route path="/login">
-                    <Login />
-                </Route>
-            </Switch>
-        </Router>
+                <Switch>
+                    <Route path="/register">
+                        <Register />
+                    </Route>
+                    <Route path="/login">
+                        <Login />
+                    </Route>
+                </Switch>
+            </Router>
+        </ThemeProvider>
     );
 };
 

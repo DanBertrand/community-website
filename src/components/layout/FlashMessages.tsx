@@ -1,25 +1,22 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { removeFlash } from '../../stores/flashmessages/flashAction';
+import { useSelector } from 'react-redux';
 import { StoreStateType } from '../../stores';
+import styled from 'styled-components';
 
 const FlashMessage: React.FC = () => {
-    const { content, category } = useSelector((state: StoreStateType) => state.flash);
+    const state = useSelector((state: StoreStateType) => state.flash);
+    const { color, content, display } = state;
 
-    const dispatch = useDispatch();
-
-    console.log('FLASH MESSAGE CONTENT ', content);
-
-    return (
-        <>
-            <div className={`alert alert-${category} alert-dismissible fade show`} role="alert">
-                {content}
-                <button type="button" className="close" onClick={() => dispatch(removeFlash())}>
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        </>
-    );
+    return display ? <FlashStyled color={color}>{content}</FlashStyled> : null;
 };
 
 export default FlashMessage;
+
+interface FlashStyledProps {
+    color: string;
+}
+
+const FlashStyled = styled.div<FlashStyledProps>`
+    width: 100%;
+    background-color: ${({ color }) => color};
+`;

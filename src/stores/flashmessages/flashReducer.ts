@@ -5,12 +5,14 @@ export type FlashStateType = {
     display: boolean;
     category: string;
     content: string;
+    color: string;
 };
 
 const initialState = {
     display: false,
     category: '',
     content: '',
+    color: '',
 };
 
 const flashReducer = (state: FlashStateType = initialState, action: FlashAction): FlashStateType => {
@@ -22,6 +24,7 @@ const flashReducer = (state: FlashStateType = initialState, action: FlashAction)
                 display: true,
                 category: action.category,
                 content: action.content,
+                color: action.color,
             };
         case FLASH_OUT:
             return {
@@ -29,6 +32,7 @@ const flashReducer = (state: FlashStateType = initialState, action: FlashAction)
                 display: false,
                 category: '',
                 content: '',
+                color: '',
             };
         default:
             return state;

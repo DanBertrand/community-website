@@ -14,6 +14,7 @@ export interface StoreStateType {
         display: boolean;
         category: string;
         content: string;
+        color: string;
     };
 }
 
