@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchToRegister } from '../../stores/authentication/authMiddleware';
+
 import * as Yup from 'yup';
 import { Formik, Field, Form } from 'formik';
-import { StoreStateType } from '../../stores';
-import { useHistory } from 'react-router-dom';
+import { useActions } from '../../hooks/useActions';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 type Values = {
     email: string;
@@ -13,19 +12,12 @@ type Values = {
 
 const Register: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const history = useHistory();
 
-    const state = useSelector((state: StoreStateType) => state.auth);
-    const dispatch = useDispatch();
-    console.log('Store', state);
+    const { signup } = useActions();
+    const { user, errorMessage } = useTypedSelector((state) => state.authentication);
 
-    const register = async (values: Values) => {
-        const data = {
-            user: values,
-        };
-        if (await dispatch(fetchToRegister(data))) {
-            history.push('/');
-        }
+    const register = async ({ email, password }: Values) => {
+        signup({ email, password });
     };
 
     const RegisterSchema = Yup.object().shape({
@@ -33,9 +25,12 @@ const Register: React.FC = () => {
         password: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Required'),
     });
 
+    console.log('USER', user);
+
     return (
         <div>
             <h1>This is register</h1>
+            <h2>ERRORS :{errorMessage}</h2>
             <Formik
                 initialValues={{
                     email: '',

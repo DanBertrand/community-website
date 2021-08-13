@@ -1,51 +1,55 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import Navbar from './components/layout/Navbar';
-// import styled from 'styled-components';
-// import mainImage from './assets/images/main-image.jpg';
 import Register from './pages/authentications/Register';
-import Home from './pages/Home';
-import { StoreStateType } from './stores/index';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Home from './pages/home';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import Login from './pages/authentications/Login';
-import Cookies from 'js-cookie';
-import { fetchCurrentUser } from './stores/authentication/authMiddleware';
-import FlashMessage from './components/layout/FlashMessages';
 import { ThemeProvider } from 'styled-components';
 import { lightTheme } from './styles/themes';
+import CreateCommunity from './pages/CreateCommunity';
+import { useTypedSelector } from './hooks/useTypedSelector';
+import { useActions } from './hooks/useActions';
+import PublicRoute from './components/route/PublicRoute';
+import PrivateRoute from './components/route/PrivateRoute';
+import Community from './pages/Community';
 
 const App: React.FC = () => {
-    const { isLogged } = useSelector((state: StoreStateType) => state.auth);
-
-    const dispatch = useDispatch();
-
-    const autoLogin = async () => {
-        const token = Cookies.get('token');
-
-        if (!isLogged && token) {
-            dispatch(fetchCurrentUser(token));
-        }
-    };
+    const { loadUser, loadCommunities } = useActions();
+    const { user } = useTypedSelector((state) => state.authentication);
+    const { communities } = useTypedSelector((state) => state.communities);
 
     useEffect(() => {
-        autoLogin();
-    }, [isLogged]);
+        if (!user) {
+            loadUser();
+        }
+    }, []);
+
+    useEffect(() => {
+        if (user && user.has_communities) {
+            console.log('COUCOU');
+            loadCommunities();
+        }
+    }, [user]);
+
+    console.log('USER', user);
+    console.log('COMMUNITIES', communities);
 
     return (
         <ThemeProvider theme={lightTheme}>
             <Router>
                 <Navbar />
-                <FlashMessage />
-                <Route path="/" exact>
-                    <Home />
-                </Route>
                 <Switch>
-                    <Route path="/register">
-                        <Register />
-                    </Route>
-                    <Route path="/login">
-                        <Login />
-                    </Route>
+                    <PublicRoute restricted={false} user={user} component={Home} path="/" exact />
+                    <PublicRoute restricted={true} user={user} component={Register} path="/register" exact />
+                    <PublicRoute restricted={true} user={user} component={Login} path="/login" exact />
+                    <PublicRoute restricted={true} user={user} component={Community} path="/community/:id" />
+                    <PrivateRoute
+                        restricted={false}
+                        user={user}
+                        component={CreateCommunity}
+                        path="/new_community"
+                        exact
+                    />
                 </Switch>
             </Router>
         </ThemeProvider>
