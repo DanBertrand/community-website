@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { fetchToLogin } from '../../stores/authentication/authMiddleware';
+// import { useDispatch } from 'react-redux';
+// import { fetchToLogin } from '../../redux/action-creators/authentications';
 import { Formik, Field, Form } from 'formik';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
+import { useActions } from '../../hooks/useActions';
 
 type Values = {
     email: string;
@@ -10,29 +11,19 @@ type Values = {
 };
 
 const Login: React.FC = () => {
-    const dispatch = useDispatch();
-    const history = useHistory();
+    // const dispatch = useDispatch();
+    // const history = useHistory();
     const [showPassword, setShowPassword] = useState(false);
+    const { login } = useActions();
 
-    const login = async (values: Values) => {
-        const data = {
-            user: values,
-        };
-        console.log('LOGIN SOON:', data);
-
-        if (await dispatch(fetchToLogin(data))) {
-            history.push('/');
-        }
-    };
     return (
         <Formik
             initialValues={{
                 email: '',
                 password: '',
             }}
-            onSubmit={(values: Values) => {
-                console.log(values);
-                login(values);
+            onSubmit={({ email, password }: Values) => {
+                login({ email, password });
             }}
         >
             {({ errors, touched }) => (

@@ -1,28 +1,35 @@
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
-import { StoreStateType } from '../../stores/index';
 import { Link } from 'react-router-dom';
 import React from 'react';
-import { fetchToLogout } from '../../stores/authentication/authMiddleware';
+import { useActions } from '../../hooks/useActions';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+// import Dropdown from '../Dropdown';
 
 const Navbar: React.FC = () => {
-    const { isLogged, token, email } = useSelector((state: StoreStateType) => state.auth);
-    const dispatch = useDispatch();
-    console.log('USER NAV BAR', isLogged);
+    const { logout } = useActions();
+    const { user } = useTypedSelector((state) => state.authentication);
 
-    const handleLogout = () => {
-        dispatch(fetchToLogout(token));
-    };
+    console.log('USER', user);
 
     return (
         <Container>
-            {isLogged ? (
+            <Link to="/">Home</Link>
+            {user ? (
                 <>
                     <div>You logged !</div>
-                    <h1>Logged as: {email}</h1>
-                    <button type="button" onClick={handleLogout}>
+                    <h1>Logged as:{user.email} </h1>
+                    <button type="button" onClick={logout}>
                         Logout
                     </button>
+                    {/* {user.has_communities && (
+                        <Dropdown
+                            communitiesCreator={user.communities.creator}
+                            communitiesMember={user.communities.member}
+                        >
+                            My Communities
+                        </Dropdown>
+                    )} */}
+                    {/* <Link to="/create_community">Create new community</Link> */}
                 </>
             ) : (
                 <>
