@@ -1,11 +1,16 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { UserType } from '../../redux/types';
+import { CommunityType, UserType } from '../../redux/types';
 
-type PublicRouteProps = {
+export type PublicRouteProps = {
     restricted: boolean;
     component: React.ElementType;
-    user: UserType | null;
+    user?: UserType | null;
+    communities?: {
+        count: number;
+        creator?: CommunityType[];
+        member?: CommunityType[];
+    };
     path: string;
     exact?: boolean;
 };

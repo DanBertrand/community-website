@@ -90,10 +90,10 @@ export const logout = () => {
     };
 };
 
-export const loadUser = () => {
+export const autoLogin = () => {
     return async (dispatch: Dispatch<AuthAction>): Promise<void> => {
         dispatch({
-            type: AuthActionType.LOAD_USER_ATTEMPT,
+            type: AuthActionType.LOGIN_ATTEMPT,
         });
         try {
             const token = Cookies.get('token');
@@ -104,6 +104,37 @@ export const loadUser = () => {
             });
             const { error, data } = await response.json();
             if (!response.ok) {
+                Cookies.remove('token');
+                throw new Error(error);
+            }
+            dispatch({
+                type: AuthActionType.LOGIN_SUCCESS,
+                payload: data,
+            });
+        } catch (err) {
+            dispatch({
+                type: AuthActionType.LOGIN_ERROR,
+                payload: err.message,
+            });
+        }
+    };
+};
+
+export const loadUser = () => {
+    return async (dispatch: Dispatch<AuthAction>): Promise<void> => {
+        dispatch({
+            type: AuthActionType.LOAD_USER_ATTEMPT,
+        });
+        try {
+            const token = Cookies.get('token');
+            if (!token) return;
+            const response = await fetch(`${API_URL}/profile`, {
+                method: 'GET',
+                headers: headers(token),
+            });
+            const { error, data } = await response.json();
+            if (!response.ok) {
+                Cookies.remove('token');
                 throw new Error(error);
             }
             dispatch({

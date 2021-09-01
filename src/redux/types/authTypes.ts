@@ -22,5 +22,12 @@ export type UserParamsType = {
 export type UserType = {
     id: number;
     email: string;
+    first_name: string;
+    last_name: string;
     has_communities: boolean;
+    avatar: {
+        id: number;
+        url: string;
+        public_id: string;
+    } | null;
 };

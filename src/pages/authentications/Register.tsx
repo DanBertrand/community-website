@@ -14,7 +14,7 @@ const Register: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const { signup } = useActions();
-    const { user, errorMessage } = useTypedSelector((state) => state.authentication);
+    const { errorMessage } = useTypedSelector((state) => state.authentication);
 
     const register = async ({ email, password }: Values) => {
         signup({ email, password });
@@ -24,8 +24,6 @@ const Register: React.FC = () => {
         email: Yup.string().email('Invalid email').required('Required'),
         password: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Required'),
     });
-
-    console.log('USER', user);
 
     return (
         <div>
@@ -38,7 +36,6 @@ const Register: React.FC = () => {
                 }}
                 validationSchema={RegisterSchema}
                 onSubmit={(values: Values) => {
-                    console.log(values);
                     register(values);
                 }}
             >
