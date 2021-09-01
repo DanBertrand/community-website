@@ -27,7 +27,7 @@ const Login: React.FC = () => {
             }}
         >
             {({ errors, touched }) => (
-                <Form>
+                <Form style={{ paddingTop: 200 }}>
                     <label htmlFor="email">Email</label>
                     <Field name="email" type="email" autoComplete="email" />
                     {errors.email && touched.email ? <div>{errors.email}</div> : null}

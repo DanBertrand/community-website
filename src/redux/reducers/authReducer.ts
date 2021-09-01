@@ -14,7 +14,6 @@ const initialState: AuthStateType = {
 };
 
 const authReducer = (state = initialState, action: AuthAction): AuthStateType => {
-    console.log('AUTH REDUCER', action);
     switch (action.type) {
         case AuthActionType.LOAD_USER_ATTEMPT:
             return {

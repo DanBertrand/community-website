@@ -1,7 +1,7 @@
 import { CommunitiesAction } from '../actions';
 import { CommunitiesActionType, CommunityType } from '../types';
 
-interface CommunityStateType {
+export type CommunityStateType = {
     communities: {
         count: number;
         creator?: CommunityType[];
@@ -9,7 +9,7 @@ interface CommunityStateType {
     } | null;
     errorMessage: string;
     isLoading: boolean;
-}
+};
 
 const initialState: CommunityStateType = {
     communities: null,
