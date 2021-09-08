@@ -5,7 +5,7 @@
 |:---------------------------|
 | Project in development     |
 
-Link edto an Ruby API for the backend
+Linked to a Ruby API for the backend
 
 In between the woofing and Airbnb concept, users can create an account.
 User can then create communities.
