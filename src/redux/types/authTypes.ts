@@ -22,6 +22,9 @@ export type UserParamsType = {
 export type UserType = {
     id: number;
     email: string;
+    confirmation_token: string;
+    confirmed_at: string | null;
+    confirmation_sent_at: string;
     first_name: string;
     last_name: string;
     has_communities: boolean;

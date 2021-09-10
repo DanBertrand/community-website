@@ -1,11 +1,11 @@
 import { CommunitiesAction } from '../actions';
-import { CommunitiesActionType, CommunityType } from '../types';
+import { CommunitiesActionType } from '../types';
+import { UserCommunity } from '../types/communitiesTypes';
 
 export type CommunityStateType = {
     communities: {
         count: number;
-        creator?: CommunityType[];
-        member?: CommunityType[];
+        data: UserCommunity[];
     } | null;
     errorMessage: string;
     isLoading: boolean;
@@ -27,13 +27,12 @@ const communitiesReducer = (state = initialState, action: CommunitiesAction): Co
                 isLoading: true,
             };
         case CommunitiesActionType.LOAD_COMMUNITIES_SUCCESS:
-            const { total_count, creator, member } = action.payload;
+            const { total_count, data } = action.payload;
             return {
                 ...state,
                 communities: {
                     count: total_count,
-                    creator,
-                    member,
+                    data: data,
                 },
                 errorMessage: '',
                 isLoading: false,

@@ -7,16 +7,45 @@ export enum CommunitiesActionType {
     DELETE_INFOS = 'delete_infos',
 }
 
-export type CommunityType = {
+export type UserCommunity = {
     id: number;
-    creator_id: number;
     name: string;
-    address: string;
-    latitude: number;
-    longitude: number;
     description: string;
-    members: [];
-    users: UserType[];
     created_at: string;
     updated_at: string;
+    user_infos: {
+        member_id: number;
+        role: string;
+    };
+};
+
+export type CommunityType = {
+    id: number;
+    member_id: number;
+    creator: UserType;
+    members_count: number;
+    moderators: Member[];
+    members: Member[];
+    name: string;
+    description: string;
+    address: AddressType;
+    created_at: string;
+    updated_at: string;
+};
+
+export type AddressType = {
+    id: number;
+    formatted_address: string;
+    house_number: string;
+    street: string;
+    post_code: string;
+    state: string;
+    country: string;
+    city: string;
+    latitude: string;
+    longitude: string;
+};
+
+export type Member = UserType & {
+    member_id: number;
 };

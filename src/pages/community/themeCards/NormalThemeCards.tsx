@@ -10,8 +10,9 @@ import EditIcon from '../../../components/EditIcon';
 type NormalThemeCardProps = {
     title: string;
     canEdit: boolean;
-    handleSelect: (title: string, editing: boolean) => void;
     selectedThemeCard: string;
+    handleSelect: (title: string, editing: boolean) => void;
+    editingMode: boolean;
 };
 
 const NormalThemeCard: React.FC<NormalThemeCardProps> = ({
@@ -19,6 +20,7 @@ const NormalThemeCard: React.FC<NormalThemeCardProps> = ({
     handleSelect,
     canEdit,
     selectedThemeCard,
+    editingMode,
 }: NormalThemeCardProps) => {
     const standardIconSize = 56;
 
@@ -33,8 +35,6 @@ const NormalThemeCard: React.FC<NormalThemeCardProps> = ({
 
     const isSelected = title === selectedThemeCard;
 
-    console.log('Can Edit', canEdit);
-
     return (
         <StyledNormalThemeCard
             onClick={(e: React.SyntheticEvent) => {
@@ -43,7 +43,14 @@ const NormalThemeCard: React.FC<NormalThemeCardProps> = ({
             }}
             isSelected={isSelected}
         >
-            {canEdit && <EditIcon onClick={() => handleSelect(title, true)} marginTop={5} marginRight={5} />}
+            {canEdit && (
+                <EditIcon
+                    active={isSelected && editingMode}
+                    onClick={() => handleSelect(title, true)}
+                    marginTop={5}
+                    marginRight={5}
+                />
+            )}
             <Content>
                 <h3>{title}</h3>
                 {(() => {

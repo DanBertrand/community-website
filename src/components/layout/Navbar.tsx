@@ -1,30 +1,30 @@
+import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import React from 'react';
 import { useActions } from '../../hooks/useActions';
-// import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { Dropdown, Option } from '../Dropdown';
-import { CommunityType, UserType } from '../../redux/types';
-
-// import { Button } from '@material-ui/core';
+import { UserType } from '../../redux/types';
 import StyledLink from '../StyledLink';
+import { UserCommunity } from '../../redux/types/communitiesTypes';
 
 type NavbarProps = {
     user: UserType | null;
     communities: {
         count: number;
-        creator?: CommunityType[];
-        member?: CommunityType[];
+        data: UserCommunity[];
     } | null;
 };
 
 const Navbar: React.FC<NavbarProps> = ({ user, communities }: NavbarProps) => {
-    const { logout } = useActions();
-    // const { user } = useTypedSelector((state) => state.authentication);
-    // const { communities } = useTypedSelector((state) => state.communities);
+    const [scrollPosition, setScrollPosition] = React.useState(0);
+    const { logout, cleanCommunities } = useActions();
     const history = useHistory();
 
-    const [scrollPosition, setScrollPosition] = React.useState(0);
+    const handleLogout = () => {
+        logout();
+        cleanCommunities();
+    };
+
     const handleScroll = () => {
         const position = window.pageYOffset;
         setScrollPosition(position);
@@ -43,18 +43,6 @@ const Navbar: React.FC<NavbarProps> = ({ user, communities }: NavbarProps) => {
 
     const currentPath = history.location.pathname;
     const currentPathID = parseInt(currentPath.replace(/\D+/g, ''));
-    // const currentPathWithoutInteger = currentPath.replace(/[0-9]/g, '');
-
-    const displayDropdown = (
-        <Dropdown handleSelect={handleSelect}>
-            {communities?.creator?.map((community) => (
-                <Option key={community.id} value={community.id} label={community.name} currentPathID={currentPathID} />
-            ))}
-            {communities?.member?.map((community) => (
-                <Option key={community.id} value={community.id} label={community.name} currentPathID={currentPathID} />
-            ))}
-        </Dropdown>
-    );
 
     return (
         <Container scrollPosition={scrollPosition}>
@@ -63,11 +51,22 @@ const Navbar: React.FC<NavbarProps> = ({ user, communities }: NavbarProps) => {
                 <>
                     <span>Logged as:{user.email} </span>
                     <StyledLink to="/my_account">My Account</StyledLink>
-                    <StyledLink onClick={logout} to="/">
+                    <StyledLink onClick={handleLogout} to="/">
                         Logout
                     </StyledLink>
 
-                    {communities && displayDropdown}
+                    {communities?.data && communities?.data.length > 0 && (
+                        <Dropdown handleSelect={handleSelect}>
+                            {communities?.data?.map((community) => (
+                                <Option
+                                    key={community.id}
+                                    value={community.id}
+                                    label={community.name}
+                                    currentPathID={currentPathID}
+                                />
+                            ))}
+                        </Dropdown>
+                    )}
                     <StyledLink to="/new_community">Create Community</StyledLink>
                 </>
             ) : (
@@ -90,11 +89,10 @@ const Container = styled.div<ContainerProps>`
     position: fixed;
     width: 100%;
     height: 80px;
-    /* background-color: #cacfd2; */
     background-color: #b3ae6d;
     box-shadow: ${({ scrollPosition }) => (scrollPosition < 20 ? 'none' : '0px 3px  #b38b6d')};
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    z-index: 999;
+    z-index: 10;
 `;

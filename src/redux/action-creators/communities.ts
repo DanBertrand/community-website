@@ -21,6 +21,7 @@ export const loadCommunities = () => {
             if (!response.ok) {
                 throw new Error(error);
             }
+            console.log('DATA LOAD COMMUITIES', data);
             dispatch({
                 type: CommunitiesActionType.LOAD_COMMUNITIES_SUCCESS,
                 payload: data,

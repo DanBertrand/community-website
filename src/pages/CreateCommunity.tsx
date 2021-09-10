@@ -7,7 +7,7 @@ import { AddressInputs, getLocation } from '../tools/location';
 import { ContentContainer, PageContainer } from '../styles/index';
 import Loading from '../components/Loading';
 
-type CommunityCreationInputs = AddressInputs & {
+export type CommunityCreationInputs = AddressInputs & {
     name: string;
     description: string;
 };
@@ -23,7 +23,7 @@ const CreateCommunity: React.FC = () => {
         houseNumber: Yup.string().min(1, 'Too Short!').max(10, 'Too Long!').required('Required'),
         street: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Required'),
         postCode: Yup.string().min(2, 'Too Short!').max(10, 'Too Long!').required('Required'),
-        city: Yup.string().min(2, 'Too Short!').max(15, 'Too Long!').required('Required'),
+        city: Yup.string().min(2, 'Too Short!').max(30, 'Too Long!').required('Required'),
         state: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!'),
         country: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Required'),
     });
@@ -46,6 +46,7 @@ const CreateCommunity: React.FC = () => {
     }: CommunityCreationInputs) => {
         setLoading(true);
         const location = await getLocation({ houseNumber, street, postCode, city, state, country });
+        console.log('Location', location);
         post(
             '/communities',
             {
@@ -56,7 +57,8 @@ const CreateCommunity: React.FC = () => {
                 post_code: postCode,
                 city,
                 state,
-                address: location.address,
+                country,
+                formatted_address: location.formatted_address,
                 latitude: location.latitude,
                 longitude: location.longitude,
             },
@@ -71,13 +73,13 @@ const CreateCommunity: React.FC = () => {
                 <Formik
                     initialValues={{
                         name: '',
-                        description: '',
                         houseNumber: '',
                         street: '',
                         postCode: '',
                         city: '',
                         state: '',
                         country: '',
+                        description: '',
                     }}
                     validationSchema={CommunitySchema}
                     onSubmit={(values: CommunityCreationInputs) => {

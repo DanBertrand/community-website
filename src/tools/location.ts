@@ -8,7 +8,7 @@ export type AddressInputs = {
 };
 
 type Location = {
-    address: string;
+    formatted_address: string;
     longitude: string;
     latitude: string;
 };
@@ -39,7 +39,7 @@ export const getLocation = async ({
         const location: Location = {
             longitude: localisation.features[0].geometry.coordinates[0],
             latitude: localisation.features[0].geometry.coordinates[1],
-            address: localisation.features[0].properties.formatted,
+            formatted_address: localisation.features[0].properties.formatted,
         };
 
         return location;
@@ -48,7 +48,7 @@ export const getLocation = async ({
         return {
             longitude: '',
             latitude: '',
-            address: `${houseNumber} ${street} ${postCode} ${city} ${state} ${country}`,
+            formatted_address: `${houseNumber} ${street} ${postCode} ${city} ${state} ${country}`,
         };
     }
 };

@@ -9,89 +9,140 @@ import { RouteParams } from '../../components/route/types';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { ContentContainer, PageContainer } from '../../styles';
 import Loading from '../../components/Loading';
-// import Loading from '../../components/Loading';
+import { ImExit } from 'react-icons/im';
+import { ImEnter } from 'react-icons/im';
+import Icon from '../../components/Icon';
+import Modal from '../../components/Modal';
+import { Button } from '../../styles/index';
+import { useActions } from '../../hooks/useActions';
 
 type CommunityProps = RouteComponentProps<RouteParams> & PublicRouteProps;
 
-const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
+const Community: React.FC<CommunityProps> = ({ match, user }: CommunityProps) => {
+    const { loadCommunities } = useActions();
+    const { get, post, remove, data: community } = useFetch();
     const { communities } = useTypedSelector((state) => state.communities);
-    const creatorIds = communities?.creator?.map((community) => community.id);
-    const canEdit = creatorIds?.includes(parseInt(match.params.id)) ? true : false;
+    const userInfos = communities?.data.find((community) => community.id === parseInt(match.params.id))?.user_infos;
     const [selectedThemeCard, setSelectedThemeCard] = React.useState('');
     const [editingMode, setEditingMode] = React.useState(false);
-    const { get, data: community } = useFetch();
+    const role = userInfos?.role ? userInfos.role : '';
+    const memberId = userInfos?.member_id ? userInfos.member_id : null;
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const cardsTitle = ['Location', 'Team', 'Project', 'Product', 'Job', 'Workshop'];
+    const warning = role ? 'Leave the community ?' : 'Join the community ?';
+
+    const toggleSubscription = async () => {
+        setIsLoading(true);
+        if (user && !memberId) {
+            const body = {
+                user_id: user.id,
+            };
+            await post(`/communities/${match.params.id}/members`, body, loadCommunities);
+        } else {
+            await remove(`/communities/${match.params.id}/members/${memberId}`, { url: 'none' }, loadCommunities);
+        }
+        setIsLoading(false);
+        setIsModalOpen(false);
+    };
 
     React.useEffect(() => {
         get(`/communities/${match.params.id}`);
-    }, [match.params.id]);
+    }, [match.params.id, communities]);
 
     const handleSelect = (title: string, editing: boolean) => {
-        console.log('Handle Select');
-        setEditingMode(editing);
-        setSelectedThemeCard(title);
+        if (selectedThemeCard === title && editingMode) {
+            setEditingMode(false);
+        } else {
+            setEditingMode(editing);
+            setSelectedThemeCard(title);
+        }
     };
 
-    console.log('match', match.params);
-    console.log('creatorIds', creatorIds);
-    console.log('communities', communities);
+    const toggleEditingMode = () => {
+        setEditingMode(!editingMode);
+    };
+
+    // console.log('communities', communities);
+    // console.log('memberId', memberId);
+    // console.log('user', user);
+    // console.log('Community', community);
+    // console.log('communities', communities);
+    // console.log('userInfos', userInfos);
 
     return (
-        <PageContainer>
-            {community ? (
-                <ContentContainer marginTop={5} marginLeft={10} marginRight={10}>
-                    <Title>{community.name}</Title>
-                    <Description>{community.description}</Description>
-                    <ContentContainer>
-                        {!selectedThemeCard ? (
-                            <WrapperDefault>
-                                {cardsTitle.map((title, index) => (
-                                    <NormalThemeCard
-                                        key={index}
-                                        selectedThemeCard={selectedThemeCard}
-                                        canEdit={canEdit}
-                                        handleSelect={handleSelect}
-                                        title={title}
-                                    />
-                                ))}
-                            </WrapperDefault>
-                        ) : (
-                            <>
+        <>
+            {isLoading && <Loading modal={true} />}
+            {isModalOpen && (
+                <Modal warning={warning} onClickOut={() => setIsModalOpen(false)}>
+                    <ContentContainer grow={0} direction={'row'}>
+                        <Button active={true} type="button" onClick={toggleSubscription}>
+                            Yes
+                        </Button>
+                        <Button active={true} type="button" onClick={() => setIsModalOpen(false)}>
+                            No
+                        </Button>
+                    </ContentContainer>
+                </Modal>
+            )}
+            <PageContainer>
+                {community ? (
+                    <ContentContainer grow={0} marginLeft={10} marginRight={10}>
+                        <Icon onClick={() => setIsModalOpen(true)} active={role ? true : false}>
+                            {role ? (
+                                <>
+                                    <ImExit size={40} />
+                                    <span>{role}</span>
+                                </>
+                            ) : (
+                                <ImEnter size={40} />
+                            )}
+                        </Icon>
+                        <Title>{community.name}</Title>
+                        <Description>{community.description}</Description>
+                        <ContentContainer alignItems={'center'}>
+                            {selectedThemeCard && (
                                 <WrapperSelected>
                                     <SelectedThemeCard
                                         community={community}
                                         title={selectedThemeCard}
                                         editingMode={editingMode}
+                                        toggleEditingMode={toggleEditingMode}
+                                        canEdit={role ? true : false}
                                     />
                                 </WrapperSelected>
-                                <WrapperDefault>
-                                    {cardsTitle?.map((title, index) => (
-                                        <NormalThemeCard
-                                            selectedThemeCard={selectedThemeCard}
-                                            key={index}
-                                            canEdit={canEdit}
-                                            handleSelect={handleSelect}
-                                            title={title}
-                                        />
-                                    ))}
-                                </WrapperDefault>
-                            </>
-                        )}
+                            )}
+                            <WrapperDefault>
+                                {cardsTitle?.map((title, index) => (
+                                    <NormalThemeCard
+                                        key={index}
+                                        selectedThemeCard={selectedThemeCard}
+                                        canEdit={role ? true : false}
+                                        handleSelect={handleSelect}
+                                        title={title}
+                                        editingMode={editingMode}
+                                    />
+                                ))}
+                            </WrapperDefault>
+                        </ContentContainer>
                     </ContentContainer>
-                </ContentContainer>
-            ) : (
-                <Loading />
-            )}
-        </PageContainer>
+                ) : (
+                    <Loading />
+                )}
+            </PageContainer>
+        </>
     );
 };
 
 export default Community;
 
 const Title = styled.h1`
+    margin: none;
     text-align: center;
-    padding-bottom: 30px;
+    padding-top: none;
+    padding-bottom: 45px;
+    font-size: 6em;
 `;
 
 const Description = styled.p`

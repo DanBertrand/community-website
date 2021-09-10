@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 type CommunityCreationBody = {
     name: string;
     description: string;
-    address: string;
+    formatted_address: string;
     longitude: string;
     latitude: string;
     house_number: string;
@@ -14,6 +14,7 @@ type CommunityCreationBody = {
     post_code: string;
     city: string;
     state: string;
+    country: string;
 };
 
 type UserBody = {
@@ -35,11 +36,19 @@ type Community = {
 type Data = Community | Community[] | undefined;
 
 type UseFetchReturn = {
-    data: any;
+    data: any | Community;
     error: ErrorType;
     isLoading: boolean;
     get: (query: string) => Promise<Community[] | Community | undefined>;
-    post: (query: string, body: CommunityCreationBody, callback?: any) => Promise<any>;
+    post: (
+        query: string,
+        body:
+            | CommunityCreationBody
+            | {
+                  user_id: number;
+              },
+        callback?: any,
+    ) => Promise<any>;
     put: (query: string, body: UserBody, callback?: any) => Promise<any>;
     remove: (query: string, body: { url: string }, callback?: any) => Promise<any>;
     submitAvatar: (body: FormData, callback?: any) => Promise<any>;
@@ -77,7 +86,15 @@ const useFetch = (): UseFetchReturn => {
         }
     };
 
-    const post = async (query: string, body: CommunityCreationBody, callback?: any) => {
+    const post = async (
+        query: string,
+        body:
+            | CommunityCreationBody
+            | {
+                  user_id: number;
+              },
+        callback?: any,
+    ) => {
         setIsLoading(true);
         setError('');
         console.log('BODY', body);
@@ -96,10 +113,11 @@ const useFetch = (): UseFetchReturn => {
             if (!response.ok) {
                 throw responseData;
             }
-            setData(responseData.data);
+            // setData(responseData.data);
             setIsLoading(false);
             if (callback) {
-                callback();
+                console.log('Call BAck');
+                await callback();
             }
             if (query === '/communities') {
                 history.push(query + `/${responseData.data.id}`);
@@ -182,7 +200,7 @@ const useFetch = (): UseFetchReturn => {
             if (!response.ok) {
                 throw responseData;
             }
-            setData(responseData.data);
+            // setData(responseData.data);
             setIsLoading(false);
             if (callback) {
                 callback();

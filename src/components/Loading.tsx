@@ -1,7 +1,6 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import styled from 'styled-components';
-import { ModalWrapper } from '../styles';
 
 type LoadingProps = {
     size?: string | number;
@@ -10,14 +9,8 @@ type LoadingProps = {
 };
 
 const Loading: React.FC<LoadingProps> = ({ size, thickness, modal }: LoadingProps) => {
-    return modal ? (
-        <ModalWrapper>
-            <LoadingContainer>
-                <CircularProgress size={size} thickness={thickness} style={{ color: 'yellow' }} />
-            </LoadingContainer>
-        </ModalWrapper>
-    ) : (
-        <LoadingContainer>
+    return (
+        <LoadingContainer modal={modal}>
             <CircularProgress size={size} thickness={thickness} style={{ color: 'yellow' }} />
         </LoadingContainer>
     );
@@ -30,27 +23,18 @@ type LoadingContainerProps = {
 };
 
 const LoadingContainer = styled.div<LoadingContainerProps>`
-    /* position: ${({ modal }) => (modal ? 'absolute' : 'relative')};
-    background: ${({ modal }) => (modal ? 'rgba(0, 0, 0, 0.6)' : 'none')}; */
-    height: 100vh;
-    width: 100vw;
+    position: ${({ modal }) => (modal ? 'absolute' : 'relative')};
+    background: ${({ modal }) => (modal ? 'rgba(0, 0, 0, 0.6)' : 'none')};
+    height: ${({ modal }) => (modal ? '100%' : '100vh')};
+    width: ${({ modal }) => (modal ? '100%' : '100vw')};
+    top: ${({ modal }) => modal && '0'};
+    left: ${({ modal }) => modal && '0'};
+    z-index: ${({ modal }) => modal && '20'};
     display: flex;
     align-items: center;
     justify-content: center;
     flex-grow: 1;
 `;
-
-// const StyledModal = styled.div`
-//     position: absolute;
-//     background: rgba(179, 174, 109, 1);
-//     min-height: 200px;
-//     height: 25%;
-//     width: 25%;
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     justify-content: center;
-// `;
 
 // const ModalWrapper = styled.div`
 //     position: absolute;
@@ -61,4 +45,5 @@ const LoadingContainer = styled.div<LoadingContainerProps>`
 //     width: 100%;
 //     display: flex;
 //     align-items: center;
+//     justify-content: center;
 // `;

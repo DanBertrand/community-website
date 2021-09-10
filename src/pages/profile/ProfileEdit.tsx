@@ -64,6 +64,7 @@ const ProfileEdit: React.FC<ProfileEditProps> = ({ user }: ProfileEditProps) => 
             if (file) {
                 const formData = new FormData();
                 formData.append('image', file);
+                formData.append('password', input.password);
                 await submitAvatar(formData);
             }
             const body = {
@@ -89,7 +90,7 @@ const ProfileEdit: React.FC<ProfileEditProps> = ({ user }: ProfileEditProps) => 
 
     return (
         <>
-            {isLoading && <Loading />}
+            {isLoading && <Loading modal={true} />}
             {isModalOpen && (
                 <Modal onClickOut={() => setIsModalOpen(false)}>
                     <form onSubmit={updateProfile}>
@@ -100,7 +101,10 @@ const ProfileEdit: React.FC<ProfileEditProps> = ({ user }: ProfileEditProps) => 
                             rules={{ min: 6, max: 10 }}
                             onChange={handleChange}
                         />
-                        <Button active={input.password.length > 5 && input.password.length < 10} type="submit">
+                        <Button
+                            active={input.password.length > 5 && input.password.length < 10 ? true : false}
+                            type="submit"
+                        >
                             Send
                         </Button>
                     </form>

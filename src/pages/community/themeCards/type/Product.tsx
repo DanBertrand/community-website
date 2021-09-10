@@ -3,10 +3,11 @@ import { CommunityType } from '../../../../redux/types';
 
 type ProductProps = {
     community: CommunityType;
+    editingMode: boolean;
 };
 
 const Product: React.FC<ProductProps> = () => {
-    return <div>Product</div>;
+    return <div></div>;
 };
 
 export default Product;

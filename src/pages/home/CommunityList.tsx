@@ -13,7 +13,12 @@ const CommunityList: React.FC = () => {
 
     return data ? (
         data.map((community: CommunityType) => (
-            <CommunityCard key={community.id} id={community.id} name={community.name} address={community.address} />
+            <CommunityCard
+                key={community.id}
+                id={community.id}
+                name={community.name}
+                address={community?.address?.formatted_address ? community.address.formatted_address : 'none'}
+            />
         ))
     ) : (
         <Loading size={'4em'} />

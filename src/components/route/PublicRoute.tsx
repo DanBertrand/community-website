@@ -18,11 +18,21 @@ export type PublicRouteProps = {
 const PublicRoute: React.FC<PublicRouteProps> = ({
     component: Component,
     restricted,
+    communities,
     user,
     ...rest
 }: PublicRouteProps) => {
     return (
-        <Route {...rest} render={(props) => (user && restricted ? <Redirect to="/" /> : <Component {...props} />)} />
+        <Route
+            {...rest}
+            render={(props) =>
+                user && restricted ? (
+                    <Redirect to="/" />
+                ) : (
+                    <Component {...props} user={user} communities={communities} />
+                )
+            }
+        />
     );
 };
 

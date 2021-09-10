@@ -1,35 +1,36 @@
 import React, { Suspense } from 'react';
 import { CommunityType } from '../../../redux/types';
 import { MainCard } from '../../../styles/index';
-
-// import Location from './type/Location';
-// import Project from './type/Project';
-// import Product from './type/Product';
-// import Job from './type/Job';
-// import Team from './type/Team';
+import Loading from '../../../components/Loading';
 
 const Product = React.lazy(() => import('./type/Product'));
 const Job = React.lazy(() => import('./type/Job'));
-const Team = React.lazy(() => import('./type/Team'));
+const Team = React.lazy(() => import('./type/team/Team'));
 const Location = React.lazy(() => import('./type/Location'));
 // const Project = React.lazy(() => import('./type/Project'));
-import Loading from '../../../components/Loading';
+// const Workshop = React.lazy(() => import('./type/Workshop'));
+import EditIcon from '../../../components/EditIcon';
 
 type SelectedThemeCardProps = {
     title: string;
     community: CommunityType;
     editingMode: boolean;
+    canEdit: boolean;
+    toggleEditingMode: () => void;
 };
 
 const SelectedThemeCard: React.FC<SelectedThemeCardProps> = ({
     title,
     community,
     editingMode,
+    toggleEditingMode,
+    canEdit,
 }: SelectedThemeCardProps) => {
-    console.log('Editing Mode', editingMode);
+    console.log('community', community);
 
     return (
         <MainCard center>
+            {canEdit && <EditIcon onClick={toggleEditingMode} active={editingMode} marginTop={5} marginRight={5} />}
             <h2>
                 {title}
                 {editingMode && '(EditMode)'}
@@ -45,15 +46,23 @@ const SelectedThemeCard: React.FC<SelectedThemeCardProps> = ({
                 {(() => {
                     switch (title) {
                         case 'Location':
-                            return <Location community={community} />;
+                            return <Location address={community.address} editingMode={editingMode} />;
                         case 'Product':
-                            return <Product community={community} />;
+                            return <Product community={community} editingMode={editingMode} />;
+                        case 'Team':
+                            return (
+                                <Team
+                                    membersCount={community.members_count}
+                                    creator={community.creator}
+                                    moderators={community.moderators}
+                                    members={community.members}
+                                    editingMode={editingMode}
+                                />
+                            );
+                        case 'Job':
+                            return <Job community={community} editingMode={editingMode} />;
                         // case 'Project':
                         //     return <Project community={community} />;
-                        case 'Team':
-                            return <Team members={community.users} />;
-                        case 'Job':
-                            return <Job community={community} />;
                         // case 'Workshop':
                         //     return <Workshop community={community} />;
                     }

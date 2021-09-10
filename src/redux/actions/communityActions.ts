@@ -1,4 +1,5 @@
-import { CommunityType, CommunitiesActionType } from '../types';
+import { CommunitiesActionType } from '../types';
+import { UserCommunity } from '../types/communitiesTypes';
 
 interface LoadCommunitiesAttempt {
     type: CommunitiesActionType.LOAD_COMMUNITIES_ATTEMPT;
@@ -8,8 +9,7 @@ interface LoadCommunitiesSuccess {
     type: CommunitiesActionType.LOAD_COMMUNITIES_SUCCESS;
     payload: {
         total_count: number;
-        creator: CommunityType[];
-        member: CommunityType[];
+        data: UserCommunity[];
     };
 }
 
