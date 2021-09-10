@@ -2,20 +2,20 @@ import React from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import Loading from '../../components/Loading';
 import Modal from '../../components/Modal';
-import { UserType } from '../../redux/types';
 
 const EmailConfirmation = (): JSX.Element => {
     const [message, setMessage] = React.useState('');
-    const [user, setUser] = React.useState<UserType>();
     const [error, setError] = React.useState('');
     const [didFetch, setDidFetch] = React.useState(false);
     const history = useHistory();
     const location = useLocation();
     const confirmationToken = location.search.split('=').pop();
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     const confirmToken = async () => {
         const resp = await fetch(
-            `http://localhost:8080/confirmation/confirmation?confirmation_token=${confirmationToken}`,
+            `$https://api-community-staging.herokuapp.com/confirmation/confirmation?confirmation_token=${confirmationToken}`,
         );
         console.log(resp);
         if (resp.ok) {
@@ -31,42 +31,35 @@ const EmailConfirmation = (): JSX.Element => {
         setDidFetch(true);
     };
 
-    const getUserByConfirmationToken = async () => {
-        const resp = await fetch(`http://localhost:8080/api/v1/user/confirmation_token/${confirmationToken}`);
-        console.log(resp);
+    // const getUserByConfirmationToken = async () => {
+    //     const resp = await fetch(`http://localhost:8080/api/v1/user/confirmation_token/${confirmationToken}`);
+    //     console.log(resp);
 
-        const data = await resp.json();
-        console.log('response USER', data.data);
-        setUser(data.data);
-    };
-
-    console.log('User', user);
+    //     const data = await resp.json();
+    //     console.log('response USER', data.data);
+    //     setUser(data.data);
+    // };
 
     const resendEmail = async () => {
         console.log('Resend Email');
-        if (user) {
-            const response = await fetch(
-                `http://localhost:8080/api/v1/user/confirmation/request_new_link/${confirmationToken}`,
-                {
-                    method: 'GET',
-                },
-            );
 
-            console.log(response);
-            const data = await response.json();
-            console.log('response USER', data.data);
-        }
+        const response = await fetch(`${API_URL}/user/confirmation/request_new_link/${confirmationToken}`, {
+            method: 'GET',
+        });
+        console.log(response);
+        const data = await response.json();
+        console.log('response USER', data.data);
     };
 
     React.useEffect(() => {
         confirmToken();
     }, []);
 
-    React.useEffect(() => {
-        if (error) {
-            getUserByConfirmationToken();
-        }
-    }, [error]);
+    // React.useEffect(() => {
+    //     if (error) {
+    //         getUserByConfirmationToken();
+    //     }
+    // }, [error]);
 
     return (
         <Modal>
