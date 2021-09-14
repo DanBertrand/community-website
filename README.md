@@ -7,6 +7,8 @@
 
 Linked to a Ruby API for the backend => https://github.com/DanBertrand/api-community
 
+Host on Vercel => https://community-world.vercel.app/
+
 In between the woofing and Airbnb concept, users can create an account.
 User can then create communities.
 
