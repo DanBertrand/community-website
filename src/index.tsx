@@ -1,24 +1,18 @@
 import reportWebVitals from './reportWebVitals';
-import React, { Suspense } from 'react';
+// import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-// import { AppBackground } from './styles';
 import { Provider } from 'react-redux';
 import { store } from './redux';
-import Loading from './components/Loading';
-
-const App = React.lazy(() => import('./App'));
-const AppBackground = React.lazy(() => import('./styles/AppBackground'));
+// import Loading from './components/Loading';
+import App from './App';
+// const App = React.lazy(() => import('./App'));
 
 ReactDOM.render(
     <Provider store={store}>
         {/* <React.StrictMode> */}
-        <Suspense fallback={null}>
-            <AppBackground />
-        </Suspense>
-        <Suspense fallback={<Loading size={'5em'} />}>
-            <App />
-        </Suspense>
+        {/* <Suspense fallback={<Loading size={'5em'} />}> */}
+        <App />
+        {/* </Suspense> */}
         {/* </React.StrictMode> */}
     </Provider>,
     document.getElementById('root'),

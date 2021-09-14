@@ -52,5 +52,4 @@ const IconContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-self: center;
-    /* flex-grow: 1; */
 `;

@@ -1,17 +1,16 @@
-import React, { Suspense, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Home from './pages/home/Home';
 import { ThemeProvider } from 'styled-components';
-import { lightTheme } from './styles/themes';
+import { GlobalStyles } from './styles/global';
+import { theme } from './styles/theme';
 import { useTypedSelector } from './hooks/useTypedSelector';
 import { useActions } from './hooks/useActions';
 import PublicRoute from './components/route/PublicRoute';
 import PrivateRoute from './components/route/PrivateRoute';
-import styled from 'styled-components';
 import { PageContainer } from './styles';
 import Loading from './components/Loading';
-
 const Register = React.lazy(() => import('./pages/authentications/Register'));
 const Login = React.lazy(() => import('./pages/authentications/Login'));
 const Profile = React.lazy(() => import('./pages/profile/Profile'));
@@ -19,6 +18,8 @@ const CreateCommunity = React.lazy(() => import('./pages/CreateCommunity'));
 const Community = React.lazy(() => import('./pages/community/Community'));
 import EmailConfirmation from './pages/authentications/EmailConfirmation';
 import Modal from './components/Modal';
+
+const { Suspense, useEffect } = React;
 
 const App: React.FC = () => {
     const { autoLogin, loadCommunities } = useActions();
@@ -29,6 +30,7 @@ const App: React.FC = () => {
         if (!user) {
             autoLogin();
         }
+        console.log('APP LOADED');
     }, []);
 
     useEffect(() => {
@@ -41,25 +43,18 @@ const App: React.FC = () => {
     console.log('communities', communities);
 
     return (
-        <ThemeProvider theme={lightTheme}>
-            <Router>
-                <AppWrapper>
-                    {/* <AppBackground /> */}
+        <ThemeProvider theme={theme}>
+            <GlobalStyles />
+            <Suspense fallback={<Loading size={'5em'} />}>
+                <Router>
                     <Navbar user={user} communities={communities} />
+
                     <Switch>
                         <PageContainer>
                             <PublicRoute restricted={false} user={user} component={Home} path="/" exact />
-
                             <Route exact path="/confirmation/">
                                 <EmailConfirmation />
                             </Route>
-                            {/* 
-                            <PublicRoute
-                                restricted={false}
-                                user={user}
-                                component={EmailConfirmation}
-                                path="/confirmation/"
-                            /> */}
                             {user && !user.confirmed_at ? (
                                 <Modal>
                                     <h1>Please confirm your email</h1>
@@ -68,7 +63,7 @@ const App: React.FC = () => {
                                     </p>
                                 </Modal>
                             ) : (
-                                <Suspense fallback={<Loading />}>
+                                <>
                                     <PublicRoute
                                         restricted={false}
                                         user={user}
@@ -108,19 +103,14 @@ const App: React.FC = () => {
                                             />
                                         </>
                                     )}
-                                </Suspense>
+                                </>
                             )}
                         </PageContainer>
                     </Switch>
-                </AppWrapper>
-            </Router>
+                </Router>
+            </Suspense>
         </ThemeProvider>
     );
 };
 
 export default App;
-
-const AppWrapper = styled.div`
-    font-family: 'Oswald', sans-serif;
-    height: 100%;
-`;

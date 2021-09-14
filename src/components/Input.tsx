@@ -9,7 +9,7 @@ type InputProps = {
         max?: number;
         min?: number;
     };
-    onChange: (e: any) => void;
+    onChange: (e: React.SyntheticEvent) => void;
 };
 
 const Input: React.FC<InputProps> = ({ label, value, onChange, name, rules }: InputProps) => {

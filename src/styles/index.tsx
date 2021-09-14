@@ -1,13 +1,8 @@
 import styled from 'styled-components';
 
 export const PageContainer = styled.div`
-    position: absolute;
-    top: 55px;
-    display: flex;
-    width: 100%;
-    /* align-items: center;
-    justify-content: center; */
-    /* flex-grow: 1; */
+    /* display: flex; */
+    /* justify-content: center; */
 `;
 
 type ContentContainerProps = {
@@ -22,37 +17,36 @@ type ContentContainerProps = {
 };
 
 export const ContentContainer = styled.div<ContentContainerProps>`
-    margin-right: ${({ marginRight }) => `${marginRight}%`};
-    margin-left: ${({ marginLeft }) => `${marginLeft}%`};
-    margin-top: ${({ marginTop }) => `${marginTop}%`};
-    margin-bottom: ${({ marginBottom }) => `${marginBottom}%`};
+    margin-right: ${({ marginRight }) => marginRight && marginRight};
+    margin-left: ${({ marginLeft }) => marginLeft && marginLeft};
+    margin-top: ${({ marginTop }) => marginTop && marginTop};
+    margin-bottom: ${({ marginBottom }) => marginBottom && marginBottom};
     display: flex;
     flex-direction: ${({ direction }) => (direction ? direction : `column`)};
     background-color: ${({ color }) => `${color}`};
     justify-content: space-evenly;
-    /* align-items: ${({ alignItems }) => alignItems && alignItems}; */
-    flex-grow: ${({ grow }) => (grow ? grow : 1)};
+    flex-grow: ${({ grow }) => grow && grow};
 `;
 
 type MainCardProps = {
     center?: boolean;
+    minHeight?: string;
+    minWidth?: string;
+    grow?: number;
 };
 
 export const MainCard = styled.div<MainCardProps>`
-    min-height: 200px;
-    min-width: 200px;
+    min-height: ${({ minHeight }) => minHeight && minHeight};
+    min-width: ${({ minWidth }) => minWidth && minWidth};
     box-shadow: 3px 3px;
     border-radius: 15px;
     padding-bottom: 10px;
-    /* margin: 30px 30px 30px 30px; */
-    /* max-height: 800px;
-    overflow-y: scroll; */
     background-color: #b36d72;
+    transition: all 3s ease-in ease-in-out;
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     align-items: ${({ center }) => center && `center`};
-    flex-grow: 1;
+    flex-grow: ${({ grow }) => grow && grow};
 `;
 
 type Button = {

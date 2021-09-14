@@ -19,9 +19,9 @@ const StyledLink: React.FC<StyledLinkProps> = ({ to, children, onClick }: Styled
 export default StyledLink;
 
 const Styled = styled.p`
-    color: #b38b6d;
-    font-size: 32px;
+    color: #f8c471;
+    padding: 0 0 0 0;
     &:hover {
-        color: #b36d72;
+        color: #7f6ca4;
     }
 `;

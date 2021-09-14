@@ -6,6 +6,7 @@ import { Dropdown, Option } from '../Dropdown';
 import { UserType } from '../../redux/types';
 import StyledLink from '../StyledLink';
 import { UserCommunity } from '../../redux/types/communitiesTypes';
+// import { GiHamburgerMenu } from 'react-icons/gi';
 
 type NavbarProps = {
     user: UserType | null;
@@ -18,6 +19,7 @@ type NavbarProps = {
 const Navbar: React.FC<NavbarProps> = ({ user, communities }: NavbarProps) => {
     const [scrollPosition, setScrollPosition] = React.useState(0);
     const { logout, cleanCommunities } = useActions();
+
     const history = useHistory();
 
     const handleLogout = () => {
@@ -43,6 +45,8 @@ const Navbar: React.FC<NavbarProps> = ({ user, communities }: NavbarProps) => {
 
     const currentPath = history.location.pathname;
     const currentPathID = parseInt(currentPath.replace(/\D+/g, ''));
+
+    console.log('NAVBAR');
 
     return (
         <Container scrollPosition={scrollPosition}>
@@ -86,13 +90,17 @@ type ContainerProps = {
 };
 
 const Container = styled.div<ContainerProps>`
-    position: fixed;
+    transition: all 3s ease-in ease-in-out;
+    top: 0;
     width: 100%;
-    height: 80px;
-    background-color: #b3ae6d;
-    box-shadow: ${({ scrollPosition }) => (scrollPosition < 20 ? 'none' : '0px 3px  #b38b6d')};
+    background-color: #424949;
+    transition: all .7s ease-in;
+    box-shadow: ${({ scrollPosition }) => (scrollPosition < 20 ? 'none' : '0px 3px  #F8C471 ')};
+    position: sticky;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     z-index: 10;
+    @media only screen and (max-width: 768px) {
+    flex-direction:column;
 `;

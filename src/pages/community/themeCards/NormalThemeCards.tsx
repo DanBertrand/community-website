@@ -84,8 +84,7 @@ const StyledNormalThemeCard = styled.div<StyledNormalThemeCardProps>`
     display: flex;
     flex-direction: column;
     box-shadow: 3px 3px;
-    /* background-color: #b38b6d; */
-    background-color: ${({ isSelected }) => (isSelected ? '#b36d72' : '#b38b6d')};
+    background-color: ${({ isSelected }) => (isSelected ? '#7f6ca4' : '#F8C471 ')};
     transform: ${({ isSelected }) => (isSelected ? 'scale(1.1)' : null)};
     border-radius: 10px;
     margin: 30px 30px 30px 30px;
@@ -93,8 +92,9 @@ const StyledNormalThemeCard = styled.div<StyledNormalThemeCardProps>`
     min-width: 200px;
     max-width: 400px;
     flex-grow: 1;
+    transition: all 0.2s ease-in;
     &:hover {
-        background-color: #b36d72;
+        background-color: #7f6ca4;
         cursor: pointer;
         transform: scale(1.1);
     }
