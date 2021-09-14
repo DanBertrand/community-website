@@ -11,35 +11,33 @@ const Profile: React.FC<PrivateRouteProps> = ({ user }: PrivateRouteProps) => {
 
     return (
         <PageContainer>
-            <ContentContainer marginLeft={10} marginRight={10}>
-                <MainCard>
-                    <EditIcon onClick={() => setEditing(!editing)} marginTop={5} marginRight={5} />
-                    <Title>Profile</Title>
-                    {!editing ? (
-                        <ContentContainer direction={'row'}>
-                            <Column>
-                                <span>{user.email}</span>
-                                <span>{user.first_name}</span>
-                                <span>{user.last_name}</span>
-                            </Column>
-                            <Column>
-                                <img
-                                    alt="Profile Picture"
-                                    style={{
-                                        borderRadius: '15px',
-                                        border: 'solid black',
-                                        width: '200px',
-                                        height: '200px',
-                                    }}
-                                    src={user.avatar?.url}
-                                />
-                            </Column>
-                        </ContentContainer>
-                    ) : (
-                        <ProfileEdit user={user} />
-                    )}
-                </MainCard>
-            </ContentContainer>
+            <MainCard>
+                <EditIcon onClick={() => setEditing(!editing)} marginTop={5} marginRight={5} />
+                <Title>Profile</Title>
+                {!editing ? (
+                    <ContentContainer direction={'row'}>
+                        <Column>
+                            <span>{user.email}</span>
+                            <span>{user.first_name}</span>
+                            <span>{user.last_name}</span>
+                        </Column>
+                        <Column>
+                            <img
+                                alt="Profile Picture"
+                                style={{
+                                    borderRadius: '15px',
+                                    border: 'solid black',
+                                    width: '200px',
+                                    height: '200px',
+                                }}
+                                src={user.avatar?.url}
+                            />
+                        </Column>
+                    </ContentContainer>
+                ) : (
+                    <ProfileEdit user={user} />
+                )}
+            </MainCard>
         </PageContainer>
     );
 };

@@ -32,7 +32,7 @@ const ProfileEdit: React.FC<ProfileEditProps> = ({ user }: ProfileEditProps) => 
     };
     const [input, setInput] = React.useState(originalInput);
 
-    const handleChange = (e: any) => {
+    const handleChange = (e: React.SyntheticEvent) => {
         const target = e.target as HTMLInputElement;
         const { name, value } = target;
         const files = target.files;
@@ -57,7 +57,7 @@ const ProfileEdit: React.FC<ProfileEditProps> = ({ user }: ProfileEditProps) => 
         }
     };
 
-    const updateProfile = async (e: any) => {
+    const updateProfile = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (input.password.length > 5) {
             setIsLoading(true);

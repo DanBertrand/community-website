@@ -6,6 +6,8 @@ import { useHistory } from 'react-router-dom';
 // import { GiCrosscutSaw } from 'react-icons/gi';
 // import { GiStrong } from 'react-icons/gi';
 // import { BiEdit } from 'react-icons/bi';
+import styled from 'styled-components';
+// import { theme } from '../../styles/theme';
 
 type CommunityCardProps = {
     id: number;
@@ -21,11 +23,24 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ id, name, address }: Comm
     };
 
     return (
-        <div onClick={handleClick} style={{ cursor: 'pointer' }}>
+        <StyledCard onClick={handleClick}>
             <h1>{name}</h1>
             <p>{address}</p>
-        </div>
+        </StyledCard>
     );
 };
 
 export default CommunityCard;
+
+const StyledCard = styled.div`
+    border: solid black;
+    cursor: pointer;
+    flex-shrink: 1;
+    margin: 1em 0 1em 0;
+    transition: all 0.25s ease-in;
+    &:hover {
+        color: #f8c471;
+        background-color: #424949;
+        box-shadow: 12px 12px 2px 1px rgba(127, 108, 164);
+    }
+`;

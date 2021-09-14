@@ -88,7 +88,7 @@ const Community: React.FC<CommunityProps> = ({ match, user }: CommunityProps) =>
             )}
             <PageContainer>
                 {community ? (
-                    <ContentContainer grow={0} marginLeft={10} marginRight={10}>
+                    <ContentContainer grow={0}>
                         <Icon onClick={() => setIsModalOpen(true)} active={role ? true : false}>
                             {role ? (
                                 <>
