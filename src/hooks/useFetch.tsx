@@ -33,6 +33,11 @@ type Community = {
     user_id: number;
 };
 
+export type WorkshopType = {
+    id: number;
+    name: string;
+};
+
 type Data = Community | Community[] | undefined;
 
 type UseFetchReturn = {
