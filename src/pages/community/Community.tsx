@@ -29,8 +29,25 @@ const Community: React.FC<CommunityProps> = ({ match, user }: CommunityProps) =>
     const memberId = userInfos?.member_id ? userInfos.member_id : null;
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
+    const [cardsTitle, setCardsTitle] = React.useState<string[]>([]);
 
-    const cardsTitle = ['Location', 'Team', 'Project', 'Product', 'Job', 'Workshop'];
+    const generateCardsTitle = () => {
+        let cardsList = ['Location', 'Team'];
+        console.log('role', role);
+        if (role === 'creator') {
+            console.log('CREATOR');
+            cardsList = [...cardsList, 'Workshop', 'Job'];
+        } else {
+            if (community.has_workshops) {
+                cardsList.push('Workshop');
+            }
+            if (community.has_jobs) {
+                cardsList.push('Jobs');
+            }
+        }
+        setCardsTitle(cardsList);
+    };
+
     const warning = role ? 'Leave the community ?' : 'Join the community ?';
 
     const toggleSubscription = async () => {
@@ -51,6 +68,12 @@ const Community: React.FC<CommunityProps> = ({ match, user }: CommunityProps) =>
         get(`/communities/${match.params.id}`);
     }, [match.params.id, communities]);
 
+    React.useEffect(() => {
+        if (community) {
+            generateCardsTitle();
+        }
+    }, [community]);
+
     const handleSelect = (title: string, editing: boolean) => {
         if (selectedThemeCard === title && editingMode) {
             setEditingMode(false);
@@ -64,10 +87,10 @@ const Community: React.FC<CommunityProps> = ({ match, user }: CommunityProps) =>
         setEditingMode(!editingMode);
     };
 
-    // console.log('communities', communities);
+    console.log('communities', communities);
     // console.log('memberId', memberId);
     // console.log('user', user);
-    // console.log('Community', community);
+    console.log('Community', community);
     // console.log('communities', communities);
     // console.log('userInfos', userInfos);
 

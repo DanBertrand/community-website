@@ -2,6 +2,9 @@ import { useState } from 'react';
 import Cookies from 'js-cookie';
 import { headers } from '../tools/api';
 import { useHistory } from 'react-router-dom';
+import { useActions } from '../hooks/useActions';
+import { CommunityType } from '../redux/types';
+import { UserCommunity } from '../redux/types/communitiesTypes';
 
 type CommunityCreationBody = {
     name: string;
@@ -35,35 +38,64 @@ type Community = {
 
 export type WorkshopType = {
     id: number;
-    name: string;
+    title: string;
+    description: string;
 };
 
-type Data = Community | Community[] | undefined;
+type Data = UserCommunity | UserCommunity[] | CommunityType[];
 
 type UseFetchReturn = {
-    data: any | Community;
+    data: any | CommunityType;
     error: ErrorType;
     isLoading: boolean;
-    get: (query: string) => Promise<Community[] | Community | undefined>;
+    get: (query: string) => Promise<CommunityType[] | CommunityType | UserCommunity>;
     post: (
         query: string,
         body:
             | CommunityCreationBody
             | {
                   user_id: number;
-              },
+              }
+            | WorkshopPost
+            | JobPost,
         callback?: any,
     ) => Promise<any>;
     put: (query: string, body: UserBody, callback?: any) => Promise<any>;
-    remove: (query: string, body: { url: string }, callback?: any) => Promise<any>;
+    remove: (query: string, body?: { url: string }, callback?: any) => Promise<any>;
     submitAvatar: (body: FormData, callback?: any) => Promise<any>;
 };
 
 type ErrorType = string;
 
+export type JobType = {
+    id: number;
+    title: string;
+    description: string;
+    duration_in_days: number;
+    nbr_of_person_required: number;
+};
+
+type WorkshopPost = {
+    workshop: {
+        title: string;
+        description: string;
+    };
+};
+
+type JobPost = {
+    job: {
+        title: string;
+        description: string;
+        duration_in_days: number;
+        nbr_of_person_required: number;
+    };
+};
+
 const useFetch = (): UseFetchReturn => {
     const API_URL = process.env.REACT_APP_API_URL;
     const history = useHistory();
+
+    const { displaySuccess, displayError } = useActions();
 
     const [data, setData] = useState<Data>();
     const [isLoading, setIsLoading] = useState(false);
@@ -97,7 +129,9 @@ const useFetch = (): UseFetchReturn => {
             | CommunityCreationBody
             | {
                   user_id: number;
-              },
+              }
+            | WorkshopPost
+            | JobPost,
         callback?: any,
     ) => {
         setIsLoading(true);
@@ -118,7 +152,9 @@ const useFetch = (): UseFetchReturn => {
             if (!response.ok) {
                 throw responseData;
             }
-            // setData(responseData.data);
+
+            const { data, message } = responseData;
+
             setIsLoading(false);
             if (callback) {
                 console.log('Call BAck');
@@ -127,10 +163,12 @@ const useFetch = (): UseFetchReturn => {
             if (query === '/communities') {
                 history.push(query + `/${responseData.data.id}`);
             }
-            return responseData;
+            displaySuccess(message);
+            return data;
         } catch (error) {
             const errMessage = error.error ? error.error : 'An error has occured';
             setError(errMessage);
+            displayError(errMessage);
         }
     };
 
@@ -183,37 +221,47 @@ const useFetch = (): UseFetchReturn => {
                 callback();
             }
 
+            displaySuccess('Avatar updated');
+
             return responseData;
         } catch (error) {
             const errMessage = error.error ? error.error : 'An error has occured';
             setError(errMessage);
+            displayError(errMessage);
             return errMessage;
         }
     };
 
     // 'delete' is not allowed as a variable declaration name so I use remove
-    const remove = async (query: string, body: { url: string }, callback?: any) => {
+    const remove = async (query: string, body?: { url: string }, callback?: any) => {
         setIsLoading(true);
         setError('');
+
         try {
             const response = await fetch(API_URL + query, {
                 method: 'DELETE',
                 headers: headers(token),
                 body: JSON.stringify(body),
             });
-            const responseData = await response.json();
+            const { data, message } = await response.json();
+            console.log('data', data);
+            console.log('message', message);
             if (!response.ok) {
-                throw responseData;
+                throw data;
             }
             // setData(responseData.data);
             setIsLoading(false);
             if (callback) {
                 callback();
             }
-            return responseData;
+            console.log('REMOVING !!!!!!');
+            displaySuccess('Deleted succesfully');
+            return data;
         } catch (error) {
+            console.log(error);
             const errMessage = error.error ? error.error : 'An error has occured';
             setError(errMessage);
+            displayError(errMessage);
         }
     };
 

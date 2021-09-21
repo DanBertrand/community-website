@@ -1,13 +1,13 @@
 import Cookies from 'js-cookie';
 import { Dispatch } from 'redux';
-import { AuthActionType, UserParamsType } from '../types';
-import { AuthAction } from '../actions';
+import { AuthActionType, MessagesActionType, UserParamsType } from '../types';
+import { AuthAction, MessagesAction } from '../actions';
 import { headers } from '../../tools/api';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const signup = (signupParams: UserParamsType) => {
-    return async (dispatch: Dispatch<AuthAction>): Promise<void> => {
+    return async (dispatch: Dispatch<AuthAction | MessagesAction>): Promise<void> => {
         const { email, password } = signupParams;
         dispatch({
             type: AuthActionType.SIGNUP_ATTEMPT,
@@ -32,9 +32,17 @@ export const signup = (signupParams: UserParamsType) => {
                 type: AuthActionType.SIGNUP_SUCCESS,
                 payload: data,
             });
+            dispatch({
+                type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
+                payload: 'Sign up Successfully',
+            });
         } catch (err) {
             dispatch({
                 type: AuthActionType.SIGNUP_ERROR,
+                payload: err.message,
+            });
+            dispatch({
+                type: MessagesActionType.DISPLAY_ERROR_MESSAGE,
                 payload: err.message,
             });
         }
@@ -42,7 +50,7 @@ export const signup = (signupParams: UserParamsType) => {
 };
 
 export const login = (loginParams: UserParamsType) => {
-    return async (dispatch: Dispatch<AuthAction>): Promise<void> => {
+    return async (dispatch: Dispatch<AuthAction | MessagesAction>): Promise<void> => {
         const { email, password } = loginParams;
         dispatch({
             type: AuthActionType.LOGIN_ATTEMPT,
@@ -55,9 +63,23 @@ export const login = (loginParams: UserParamsType) => {
                     user: { email, password },
                 }),
             });
-            const { error, data } = await response.json();
+
+            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+            console.log('response', response);
+            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+
+            const { message, data } = await response.json();
+
+            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+            console.log('message', message);
+            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+
+            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+            console.log('data', data);
+            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+
             if (!response.ok) {
-                throw new Error(error);
+                throw new Error(data.error);
             }
             const token = response.headers.get('authorization')?.split(' ')[1] || '';
             if (token) {
@@ -67,17 +89,25 @@ export const login = (loginParams: UserParamsType) => {
                 type: AuthActionType.LOGIN_SUCCESS,
                 payload: data,
             });
+            dispatch({
+                type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
+                payload: message && 'Logged in',
+            });
         } catch (err) {
             dispatch({
                 type: AuthActionType.LOGIN_ERROR,
                 payload: err.message,
+            });
+            dispatch({
+                type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
+                payload: 'Login successfully',
             });
         }
     };
 };
 
 export const logout = () => {
-    return async (dispatch: Dispatch<AuthAction>): Promise<void> => {
+    return async (dispatch: Dispatch<AuthAction | MessagesAction>): Promise<void> => {
         const token = Cookies.get('token');
         fetch(`${API_URL}/logout`, {
             method: 'DELETE',
@@ -87,11 +117,15 @@ export const logout = () => {
         dispatch({
             type: AuthActionType.LOGOUT,
         });
+        dispatch({
+            type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
+            payload: 'Logout successfully',
+        });
     };
 };
 
 export const autoLogin = () => {
-    return async (dispatch: Dispatch<AuthAction>): Promise<void> => {
+    return async (dispatch: Dispatch<AuthAction | MessagesAction>): Promise<void> => {
         dispatch({
             type: AuthActionType.LOGIN_ATTEMPT,
         });
@@ -102,15 +136,22 @@ export const autoLogin = () => {
                 method: 'POST',
                 headers: headers(token),
             });
+            console.log('response', response);
+
             const { error, data } = await response.json();
             if (!response.ok) {
                 Cookies.remove('token');
                 throw new Error(error);
             }
+
             dispatch({
                 type: AuthActionType.LOGIN_SUCCESS,
                 payload: data,
             });
+            // dispatch({
+            //     type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
+            //     payload: data,
+            // });
         } catch (err) {
             dispatch({
                 type: AuthActionType.LOGIN_ERROR,

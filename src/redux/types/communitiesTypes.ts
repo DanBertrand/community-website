@@ -29,6 +29,8 @@ export type CommunityType = {
     name: string;
     description: string;
     address: AddressType;
+    has_jobs: boolean;
+    has_workshops: boolean;
     created_at: string;
     updated_at: string;
 };

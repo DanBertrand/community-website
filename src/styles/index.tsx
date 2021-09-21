@@ -22,6 +22,7 @@ export const ContentContainer = styled.div<ContentContainerProps>`
     margin-top: ${({ marginTop }) => marginTop && marginTop};
     margin-bottom: ${({ marginBottom }) => marginBottom && marginBottom};
     display: flex;
+
     flex-direction: ${({ direction }) => (direction ? direction : `column`)};
     background-color: ${({ color }) => `${color}`};
     justify-content: space-evenly;

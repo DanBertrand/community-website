@@ -17,6 +17,9 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     community,
     ...rest
 }: PrivateRouteProps) => {
+    // if (!user) {
+    //     displaySuccess('Log in in order to continue');
+    // }
     return (
         <Route
             {...rest}

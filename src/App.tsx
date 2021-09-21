@@ -18,13 +18,18 @@ const CreateCommunity = React.lazy(() => import('./pages/CreateCommunity'));
 const Community = React.lazy(() => import('./pages/community/Community'));
 import EmailConfirmation from './pages/authentications/EmailConfirmation';
 import Modal from './components/Modal';
-
+import FlashMessage from './components/FlashMessage';
 const { Suspense, useEffect } = React;
 
 const App: React.FC = () => {
     const { autoLogin, loadCommunities } = useActions();
     const { user } = useTypedSelector((state) => state.authentication);
     const { communities } = useTypedSelector((state) => state.communities);
+    const { message, color } = useTypedSelector((state) => state.message);
+
+    console.log('*******************************************');
+    console.log(message);
+    console.log('*******************************************');
 
     useEffect(() => {
         if (!user) {
@@ -40,6 +45,7 @@ const App: React.FC = () => {
     }, [user]);
 
     console.log('user', user);
+    console.log('user CONFIRMED AT', user?.confirmed_at);
     console.log('communities', communities);
 
     return (
@@ -48,6 +54,8 @@ const App: React.FC = () => {
             <Suspense fallback={<Loading size={'5em'} />}>
                 <Router>
                     <Navbar user={user} communities={communities} />
+
+                    {message && <FlashMessage color={color} message={message} />}
 
                     <Switch>
                         <PageContainer>

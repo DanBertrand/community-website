@@ -16,7 +16,7 @@ const EmailConfirmation = (): JSX.Element => {
     const confirmToken = async () => {
         const resp = await fetch(
             // `https://api-community-staging.herokuapp.com/confirmation/confirmation?confirmation_token=${confirmationToken}`,
-            `${API_URL}/confirmation/confirmation?confirmation_token=${confirmationToken}`,
+            `http://localhost:8080/confirmation/confirmation?confirmation_token=${confirmationToken}`,
         );
         console.log(resp);
         if (resp.ok) {
