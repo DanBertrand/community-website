@@ -26,6 +26,7 @@ const App: React.FC = () => {
     const { user } = useTypedSelector((state) => state.authentication);
     const { communities } = useTypedSelector((state) => state.communities);
     const { message, color } = useTypedSelector((state) => state.message);
+    const API_URL = process.env.REACT_APP_API_URL;
 
     console.log('*******************************************');
     console.log(message);
@@ -48,6 +49,17 @@ const App: React.FC = () => {
     console.log('user CONFIRMED AT', user?.confirmed_at);
     console.log('communities', communities);
 
+    const resendEmail = async () => {
+        console.log('Resend Email');
+
+        const response = await fetch(`${API_URL}/user/confirmation/request_new_link/${user?.confirmation_token}`, {
+            method: 'GET',
+        });
+        console.log(response);
+        const data = await response.json();
+        console.log('response USER', data.data);
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <GlobalStyles />
@@ -69,6 +81,8 @@ const App: React.FC = () => {
                                     <p>
                                         An email has been sent to {user.email}. Click in the link to confirm your email.
                                     </p>
+
+                                    <input type="button" value="Resend confirmation email" onClick={resendEmail} />
                                 </Modal>
                             ) : (
                                 <>

@@ -15,13 +15,13 @@ type NormalThemeCardProps = {
     editingMode: boolean;
 };
 
-const NormalThemeCard: React.FC<NormalThemeCardProps> = ({
+const NormalThemeCard = ({
     title,
     handleSelect,
     canEdit,
     selectedThemeCard,
     editingMode,
-}: NormalThemeCardProps) => {
+}: NormalThemeCardProps): JSX.Element => {
     const standardIconSize = 56;
 
     const icon = {
@@ -36,41 +36,43 @@ const NormalThemeCard: React.FC<NormalThemeCardProps> = ({
     const isSelected = title === selectedThemeCard;
 
     return (
-        <StyledNormalThemeCard
-            onClick={(e: React.SyntheticEvent) => {
-                e.stopPropagation();
-                handleSelect(title, false);
-            }}
-            isSelected={isSelected}
-        >
-            {canEdit && (
-                <EditIcon
-                    active={isSelected && editingMode}
-                    onClick={() => handleSelect(title, true)}
-                    marginTop={5}
-                    marginRight={5}
-                />
-            )}
-            <Content>
-                <h3>{title}</h3>
-                {(() => {
-                    switch (title) {
-                        case 'Location':
-                            return icon.location;
-                        case 'Product':
-                            return icon.product;
-                        case 'Project':
-                            return icon.project;
-                        case 'Team':
-                            return icon.team;
-                        case 'Job':
-                            return icon.job;
-                        case 'Workshop':
-                            return icon.workshop;
-                    }
-                })()}
-            </Content>
-        </StyledNormalThemeCard>
+        <>
+            <StyledNormalThemeCard
+                onClick={(e: React.SyntheticEvent) => {
+                    e.stopPropagation();
+                    handleSelect(title, false);
+                }}
+                isSelected={isSelected}
+            >
+                {canEdit && (
+                    <EditIcon
+                        active={isSelected && editingMode}
+                        onClick={() => handleSelect(title, true)}
+                        marginTop={5}
+                        marginRight={5}
+                    />
+                )}
+                <Content>
+                    <h3>{title}</h3>
+                    {(() => {
+                        switch (title) {
+                            case 'Location':
+                                return icon.location;
+                            case 'Product':
+                                return icon.product;
+                            case 'Project':
+                                return icon.project;
+                            case 'Team':
+                                return icon.team;
+                            case 'Job':
+                                return icon.job;
+                            case 'Workshop':
+                                return icon.workshop;
+                        }
+                    })()}
+                </Content>
+            </StyledNormalThemeCard>
+        </>
     );
 };
 

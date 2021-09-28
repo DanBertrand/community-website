@@ -5,22 +5,23 @@ import { UserType } from '../../redux/types';
 import Modal from '../../components/Modal';
 import * as _ from 'lodash';
 import { useActions } from '../../hooks/useActions';
-import useFetch from '../../hooks/useFetch';
+
 import AvatarEdit from './AvatarEdit';
 import Loading from '../../components/Loading';
+import useFetch from '../../hooks/useFetch';
 
 type ProfileEditProps = {
     user: UserType;
 };
 
 const ProfileEdit: React.FC<ProfileEditProps> = ({ user }: ProfileEditProps) => {
-    const [isLoading, setIsLoading] = React.useState(false);
     const [madeChange, setMadeChange] = React.useState(false);
     const [previewFile, setPreviewFile] = React.useState('');
     const [file, setFile] = React.useState<File>();
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const { loadUser } = useActions();
-    const { put, submitAvatar, remove } = useFetch();
+    const { state, postAvatar, remove, put } = useFetch();
+    const { isLoading } = state;
 
     const originalInput = {
         firstName: user.first_name || '',
@@ -52,7 +53,6 @@ const ProfileEdit: React.FC<ProfileEditProps> = ({ user }: ProfileEditProps) => 
         if (previewFile) {
             setPreviewFile('');
         } else if (user.avatar?.url) {
-            setIsLoading(true);
             await remove(`/user/avatars/${user.avatar.id}`, { url: user.avatar.url }, loadUser);
         }
     };
@@ -60,12 +60,12 @@ const ProfileEdit: React.FC<ProfileEditProps> = ({ user }: ProfileEditProps) => 
     const updateProfile = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (input.password.length > 5) {
-            setIsLoading(true);
             if (file) {
                 const formData = new FormData();
                 formData.append('image', file);
                 formData.append('password', input.password);
-                await submitAvatar(formData);
+                console.log('formData', formData);
+                await postAvatar('/user/avatars', formData);
             }
             const body = {
                 account_update: {

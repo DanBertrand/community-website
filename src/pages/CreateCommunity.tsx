@@ -6,6 +6,7 @@ import { useActions } from '../hooks/useActions';
 import { AddressInputs, getLocation } from '../tools/location';
 import { ContentContainer, PageContainer } from '../styles/index';
 import Loading from '../components/Loading';
+import { CommunityType } from '../redux/types';
 
 export type CommunityCreationInputs = AddressInputs & {
     name: string;
@@ -13,9 +14,9 @@ export type CommunityCreationInputs = AddressInputs & {
 };
 
 const CreateCommunity: React.FC = () => {
-    const [loading, setLoading] = React.useState(false);
     const { loadCommunities } = useActions();
-    const { post, isLoading } = useFetch();
+    const { state, post } = useFetch<CommunityType>();
+    const { isLoading } = state;
 
     const CommunitySchema = Yup.object().shape({
         name: Yup.string().required('Required'),
@@ -28,12 +29,6 @@ const CreateCommunity: React.FC = () => {
         country: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Required'),
     });
 
-    React.useEffect(() => {
-        if (!isLoading) {
-            setLoading(false);
-        }
-    }, [isLoading]);
-
     const create = async ({
         name,
         description,
@@ -44,7 +39,6 @@ const CreateCommunity: React.FC = () => {
         state,
         country,
     }: CommunityCreationInputs) => {
-        setLoading(true);
         const location = await getLocation({ houseNumber, street, postCode, city, state, country });
         console.log('Location', location);
         post(
@@ -129,7 +123,7 @@ const CreateCommunity: React.FC = () => {
                         </Form>
                     )}
                 </Formik>
-                {loading && <Loading modal />}
+                {isLoading && <Loading modal />}
             </ContentContainer>
         </PageContainer>
     );

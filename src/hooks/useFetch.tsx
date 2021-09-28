@@ -1,10 +1,54 @@
-import { useState } from 'react';
 import Cookies from 'js-cookie';
+import { useReducer } from 'react';
 import { headers } from '../tools/api';
+import { useActions } from './useActions';
 import { useHistory } from 'react-router-dom';
-import { useActions } from '../hooks/useActions';
-import { CommunityType } from '../redux/types';
-import { UserCommunity } from '../redux/types/communitiesTypes';
+import { UserType } from '../redux/types';
+
+interface State<T> {
+    data?: T;
+    error?: Error;
+    isLoading: boolean;
+}
+
+type Url = {
+    url: string;
+};
+
+type CallBack = () => void;
+
+type AvatarPost = {
+    image: File;
+    password: string;
+};
+
+type UserBody = {
+    account_update: {
+        first_name: string;
+        last_name: string;
+        password: string;
+    };
+};
+
+export type WorkshopType = {
+    id: number;
+    title: string;
+    description: string;
+};
+
+interface FetchReturn<T> {
+    state: State<T>;
+    get: (query: string) => void;
+    post: (
+        query: string,
+        body: CommunityCreationBody | WorkshopCreationBody | JobCreationBody | AvatarPost,
+        callback?: CallBack,
+    ) => void;
+    patch: (query: string, body: unknown, callback?: CallBack) => Promise<void>;
+    put: (query: string, body: UserBody, callback?: CallBack) => Promise<void>;
+    remove: (query: string, body?: Url | undefined, callback?: CallBack) => Promise<void>;
+    postAvatar: (query: string, body: FormData) => Promise<void>;
+}
 
 type CommunityCreationBody = {
     name: string;
@@ -20,142 +64,105 @@ type CommunityCreationBody = {
     country: string;
 };
 
-type UserBody = {
-    account_update: {
-        first_name: string;
-        last_name: string;
-        password: string;
-    };
-};
-
-type Community = {
-    id: number;
-    name: string;
-    description: string;
-    address: string;
-    user_id: number;
-};
-
-export type WorkshopType = {
-    id: number;
-    title: string;
-    description: string;
-};
-
-type Data = UserCommunity | UserCommunity[] | CommunityType[];
-
-type UseFetchReturn = {
-    data: any | CommunityType;
-    error: ErrorType;
-    isLoading: boolean;
-    get: (query: string) => Promise<CommunityType[] | CommunityType | UserCommunity>;
-    post: (
-        query: string,
-        body:
-            | CommunityCreationBody
-            | {
-                  user_id: number;
-              }
-            | WorkshopPost
-            | JobPost,
-        callback?: any,
-    ) => Promise<any>;
-    put: (query: string, body: UserBody, callback?: any) => Promise<any>;
-    remove: (query: string, body?: { url: string }, callback?: any) => Promise<any>;
-    submitAvatar: (body: FormData, callback?: any) => Promise<any>;
-};
-
-type ErrorType = string;
-
-export type JobType = {
-    id: number;
-    title: string;
-    description: string;
-    duration_in_days: number;
-    nbr_of_person_required: number;
-};
-
-type WorkshopPost = {
+type WorkshopCreationBody = {
     workshop: {
         title: string;
         description: string;
     };
 };
 
-type JobPost = {
-    job: {
-        title: string;
-        description: string;
-        duration_in_days: number;
-        nbr_of_person_required: number;
-    };
+type JobCreationBody = {
+    job: { title: string; description: string; nbr_of_person_required: number; duration_in_days: number };
 };
 
-const useFetch = (): UseFetchReturn => {
+export type JobType = {
+    id: number;
+    community_id: number;
+    title: string;
+    description: string;
+    duration_in_days: number;
+    nbr_of_person_required: number;
+    users: UserType[];
+};
+
+type Action<T> =
+    | { type: 'loading' }
+    | { type: 'got'; payload: T }
+    | { type: 'posted' }
+    | { type: 'patched' }
+    | { type: 'deleted' }
+    | { type: 'error'; payload: Error };
+
+function useFetch<T = unknown>(): FetchReturn<T> {
+    const { displaySuccess, displayError } = useActions();
+    const token = Cookies.get('token');
     const API_URL = process.env.REACT_APP_API_URL;
     const history = useHistory();
 
-    const { displaySuccess, displayError } = useActions();
+    const initialState: State<T> = {
+        error: undefined,
+        data: undefined,
+        isLoading: false,
+    };
 
-    const [data, setData] = useState<Data>();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<ErrorType>('');
-    const token = Cookies.get('token');
+    const fetchReducer = (state: State<T>, action: Action<T>): State<T> => {
+        switch (action.type) {
+            case 'loading':
+                return { ...initialState, isLoading: true };
+            case 'got':
+                return { ...initialState, data: action.payload, isLoading: false };
+            case 'posted':
+            case 'patched':
+            case 'deleted':
+                return { ...state, isLoading: false };
+            case 'error':
+                return { ...initialState, error: action.payload, isLoading: false };
+            default:
+                return state;
+        }
+    };
+
+    const [state, dispatch] = useReducer(fetchReducer, initialState);
 
     const get = async (query: string) => {
-        setIsLoading(true);
-        setError('');
+        dispatch({ type: 'loading' });
         try {
             const response = await fetch(API_URL + query, {
                 method: 'GET',
                 headers: headers(token),
             });
-            const responseData = await response.json();
             if (!response.ok) {
-                throw responseData;
+                throw new Error(response.statusText);
             }
-            setData(responseData.data);
-            setIsLoading(false);
-            return responseData;
+            const responseData = await response.json();
+            dispatch({ type: 'got', payload: responseData.data as T });
         } catch (error) {
-            const errMessage = error.error ? error.error : 'An error has occured';
-            setError(errMessage);
+            dispatch({ type: 'error', payload: error as Error });
         }
     };
 
     const post = async (
         query: string,
-        body:
-            | CommunityCreationBody
-            | {
-                  user_id: number;
-              }
-            | WorkshopPost
-            | JobPost,
-        callback?: any,
+        body: CommunityCreationBody | WorkshopCreationBody | JobCreationBody | AvatarPost,
+        callback?: CallBack,
     ) => {
-        setIsLoading(true);
-        setError('');
-        console.log('BODY', body);
-
-        // const generateBody = bo
-
+        dispatch({ type: 'loading' });
+        console.log('body', body);
         try {
             const response = await fetch(API_URL + query, {
                 method: 'POST',
                 headers: headers(token),
                 body: JSON.stringify(body),
             });
-            console.log('response', response);
-            const responseData = await response.json();
-            console.log('responseData', responseData);
             if (!response.ok) {
-                throw responseData;
+                throw new Error(response.statusText);
             }
-
-            const { data, message } = responseData;
-
-            setIsLoading(false);
+            console.log(response);
+            const responseData = await response.json();
+            console.log(responseData);
+            const { message } = responseData;
+            dispatch({ type: 'posted' });
+            displaySuccess(message);
             if (callback) {
                 console.log('Call BAck');
                 await callback();
@@ -163,18 +170,38 @@ const useFetch = (): UseFetchReturn => {
             if (query === '/communities') {
                 history.push(query + `/${responseData.data.id}`);
             }
-            displaySuccess(message);
-            return data;
         } catch (error) {
-            const errMessage = error.error ? error.error : 'An error has occured';
-            setError(errMessage);
-            displayError(errMessage);
+            displayError(`An error has occurred ${error}`);
         }
     };
 
-    const put = async (query: string, body: UserBody, callback?: any) => {
-        setIsLoading(true);
-        setError('');
+    const postAvatar = async (query: string, body: FormData) => {
+        dispatch({ type: 'loading' });
+        console.log('body', body);
+        try {
+            const response = await fetch(API_URL + query, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: 'application/json',
+                },
+                body: body,
+            });
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            console.log(response);
+            const responseData = await response.json();
+            console.log(responseData);
+            const { message } = responseData;
+            dispatch({ type: 'posted' });
+            displaySuccess(message);
+        } catch (error) {
+            displayError(`An error has occurred ${error}`);
+        }
+    };
+
+    const put = async (query: string, body: UserBody, callback?: CallBack) => {
         try {
             const response = await fetch(API_URL + query, {
                 method: 'PUT',
@@ -185,96 +212,70 @@ const useFetch = (): UseFetchReturn => {
             if (!response.ok) {
                 throw responseData;
             }
-            setData(responseData.data);
-            setIsLoading(false);
+
             if (callback) {
                 callback();
             }
             return responseData;
         } catch (error) {
-            const errMessage = error.error ? error.error : 'An error has occured';
-            setError(errMessage);
+            displayError(`An error has occurred ${error}`);
         }
     };
 
-    const submitAvatar = async (body: FormData, callback?: any) => {
-        setIsLoading(true);
-        setError('');
+    const patch = async (query: string, body: unknown, callback?: CallBack) => {
         try {
-            const response = await fetch(API_URL + '/user/avatars', {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: 'application/json',
-                },
-                body: body,
+            const response = await fetch(API_URL + query, {
+                method: 'PATCH',
+                headers: headers(token),
+                body: JSON.stringify(body),
             });
-            console.log('response', response);
-            const responseData = await response.json();
-            console.log('responseData', responseData);
             if (!response.ok) {
-                throw responseData;
+                throw new Error(response.statusText);
             }
-            setData(responseData.data);
-            setIsLoading(false);
+            const responseData = await response.json();
+            const { message } = responseData;
+            dispatch({ type: 'patched' });
+            displaySuccess(message);
             if (callback) {
                 callback();
             }
-
-            displaySuccess('Avatar updated');
-
-            return responseData;
         } catch (error) {
-            const errMessage = error.error ? error.error : 'An error has occured';
-            setError(errMessage);
-            displayError(errMessage);
-            return errMessage;
+            displayError(`An error has occurred ${error}`);
         }
     };
 
     // 'delete' is not allowed as a variable declaration name so I use remove
-    const remove = async (query: string, body?: { url: string }, callback?: any) => {
-        setIsLoading(true);
-        setError('');
-
+    const remove = async (query: string, body?: { url: string }, callback?: CallBack) => {
         try {
             const response = await fetch(API_URL + query, {
                 method: 'DELETE',
                 headers: headers(token),
                 body: JSON.stringify(body),
             });
-            const { data, message } = await response.json();
-            console.log('data', data);
-            console.log('message', message);
             if (!response.ok) {
-                throw data;
+                throw new Error(response.statusText);
             }
-            // setData(responseData.data);
-            setIsLoading(false);
+            const responseData = await response.json();
+            const { message } = responseData;
             if (callback) {
                 callback();
             }
-            console.log('REMOVING !!!!!!');
-            displaySuccess('Deleted succesfully');
-            return data;
+            dispatch({ type: 'deleted' });
+            displaySuccess(message);
         } catch (error) {
-            console.log(error);
-            const errMessage = error.error ? error.error : 'An error has occured';
-            setError(errMessage);
-            displayError(errMessage);
+            displayError(`An error has occurred ${error}`);
         }
     };
 
     return {
-        data,
-        error,
-        isLoading,
+        state,
         get,
         post,
-        put,
+        patch,
         remove,
-        submitAvatar,
+        put,
+        postAvatar,
     };
-};
+}
 
 export default useFetch;

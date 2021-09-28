@@ -29,7 +29,7 @@ export const loadCommunities = () => {
         } catch (err) {
             dispatch({
                 type: CommunitiesActionType.LOAD_COMMUNITIES_ERROR,
-                payload: err.message,
+                payload: `An error has occured ${err}`,
             });
         }
     };

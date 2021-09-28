@@ -1,4 +1,3 @@
-import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import styled from 'styled-components';
 
@@ -8,11 +7,13 @@ type LoadingProps = {
     modal?: boolean;
 };
 
-const Loading: React.FC<LoadingProps> = ({ size, thickness, modal }: LoadingProps) => {
+const Loading: React.FC<LoadingProps> = ({ size, thickness, modal }: LoadingProps): JSX.Element => {
     return (
-        <LoadingContainer modal={modal}>
-            <CircularProgress size={size} thickness={thickness} style={{ color: 'yellow' }} />
-        </LoadingContainer>
+        <>
+            <LoadingContainer modal={modal}>
+                <CircularProgress size={size} thickness={thickness} style={{ color: 'yellow' }} />
+            </LoadingContainer>
+        </>
     );
 };
 
@@ -35,15 +36,3 @@ const LoadingContainer = styled.div<LoadingContainerProps>`
     justify-content: center;
     flex-grow: 1;
 `;
-
-// const ModalWrapper = styled.div`
-//     position: absolute;
-//     background: rgba(0, 0, 0, 0.6);
-//     top: 0;
-//     left: 0;
-//     height: 100%;
-//     width: 100%;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-// `;

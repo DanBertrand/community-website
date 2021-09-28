@@ -1,3 +1,5 @@
+import { JobType } from '../../hooks/useFetch';
+
 export enum AuthActionType {
     LOGIN_ATTEMPT = 'login_attempt',
     LOGIN_SUCCESS = 'login_success',
@@ -28,9 +30,11 @@ export type UserType = {
     first_name: string;
     last_name: string;
     has_communities: boolean;
+    jobs: JobType[];
+    workshops: [];
     avatar: {
         id: number;
         url: string;
         public_id: string;
-    } | null;
+    };
 };

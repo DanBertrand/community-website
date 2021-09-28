@@ -1,8 +1,8 @@
 import React from 'react';
 import { CommunityType } from '../../../../redux/types';
-import useFetch, { WorkshopType } from '../../../../hooks/useFetch';
 import styled from 'styled-components';
 import { useTypedSelector } from '../../../../hooks/useTypedSelector';
+import useFetch, { WorkshopType } from '../../../../hooks/useFetch';
 
 type WorkshopProps = {
     community: CommunityType;
@@ -15,7 +15,8 @@ const Workshop: React.FC<WorkshopProps> = ({ community }: WorkshopProps) => {
     const [description, setDescription] = React.useState('');
     const [create, setCreate] = React.useState(false);
     const [reload, setReload] = React.useState(0);
-    const { post, get, data: workshops, patch, remove } = useFetch();
+    const { get, state, post, patch, remove } = useFetch<WorkshopType[]>();
+    const { data: workshops } = state;
 
     const handleSubmit = async (e: React.FormEvent<EventTarget>) => {
         e.preventDefault();

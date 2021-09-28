@@ -1,11 +1,10 @@
 import React, { ReactElement } from 'react';
-import { IconType } from 'react-icons/lib';
 import styled from 'styled-components';
 
 type IconContainerProps = IconStyleProps & {
     size?: number;
     onClick: () => void;
-    children?: IconType | Element | ReactElement<any, any>;
+    children?: ReactElement;
 };
 
 const Icon: React.FC<IconContainerProps> = ({
@@ -48,6 +47,7 @@ const IconStyle = styled.div<IconStyleProps>`
         color: ${({ active }) => (active ? 'red' : 'green')};
     }
 `;
+
 const IconContainer = styled.div`
     display: flex;
     flex-direction: row;

@@ -32,15 +32,6 @@ const EmailConfirmation = (): JSX.Element => {
         setDidFetch(true);
     };
 
-    // const getUserByConfirmationToken = async () => {
-    //     const resp = await fetch(`http://localhost:8080/api/v1/user/confirmation_token/${confirmationToken}`);
-    //     console.log(resp);
-
-    //     const data = await resp.json();
-    //     console.log('response USER', data.data);
-    //     setUser(data.data);
-    // };
-
     const resendEmail = async () => {
         console.log('Resend Email');
 
@@ -56,26 +47,23 @@ const EmailConfirmation = (): JSX.Element => {
         confirmToken();
     }, []);
 
-    // React.useEffect(() => {
-    //     if (error) {
-    //         getUserByConfirmationToken();
-    //     }
-    // }, [error]);
+    if (!didFetch) {
+        return <Loading />;
+    } else {
+        return (
+            <Modal>
+                <h2>
+                    {message && message}
+                    {error && error}
+                </h2>
+                <p> You can request a new confirmation link</p>
 
-    return (
-        <Modal>
-            <h2>
-                {message && message}
-                {error && error}
-            </h2>
-            <p> You can request a new confirmation link</p>
-
-            <button type="button" onClick={resendEmail}>
-                Resend Email
-            </button>
-            {!didFetch && <Loading />}
-        </Modal>
-    );
+                <button type="button" onClick={resendEmail}>
+                    Resend Email
+                </button>
+            </Modal>
+        );
+    }
 };
 
 export default EmailConfirmation;

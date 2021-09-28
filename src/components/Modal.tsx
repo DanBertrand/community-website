@@ -2,15 +2,15 @@ import React, { ReactElement } from 'react';
 import styled from 'styled-components';
 
 type ModalProps = {
-    children: ReactElement | ReactElement[] | any;
+    children: ReactElement | ReactElement[];
     warning?: string;
     onClickOut?: () => void;
 };
 
-const Modal: React.FC<ModalProps> = ({ children, onClickOut, warning }: ModalProps) => {
+const Modal = ({ children, onClickOut, warning }: ModalProps): JSX.Element => {
     const ref = React.useRef<HTMLDivElement>(null);
     React.useEffect(() => {
-        const checkIfClickedOutside: EventListenerOrEventListenerObject = (e: any) => {
+        const checkIfClickedOutside: EventListenerOrEventListenerObject = (e: Event) => {
             const target = e.target as HTMLInputElement;
             if (onClickOut && ref.current && !ref.current?.contains(target)) {
                 onClickOut();
@@ -22,17 +22,19 @@ const Modal: React.FC<ModalProps> = ({ children, onClickOut, warning }: ModalPro
         };
     }, []);
     return (
-        <ModalWrapper>
-            <StyledModal ref={ref}>
-                {onClickOut && (
-                    <button style={{ color: 'black' }} onClick={onClickOut}>
-                        X
-                    </button>
-                )}
-                <p style={{ flexGrow: 1, verticalAlign: 'middle' }}>{warning}</p>
-                {children}
-            </StyledModal>
-        </ModalWrapper>
+        <>
+            <ModalWrapper>
+                <StyledModal ref={ref}>
+                    {onClickOut && (
+                        <button style={{ color: 'black' }} onClick={onClickOut}>
+                            X
+                        </button>
+                    )}
+                    <p style={{ flexGrow: 1, verticalAlign: 'middle' }}>{warning}</p>
+                    {children}
+                </StyledModal>
+            </ModalWrapper>
+        </>
     );
 };
 

@@ -15,7 +15,7 @@ type CommunityCardProps = {
     address: string;
 };
 
-const CommunityCard: React.FC<CommunityCardProps> = ({ id, name, address }: CommunityCardProps) => {
+const CommunityCard: React.FC<CommunityCardProps> = ({ id, name, address }: CommunityCardProps): JSX.Element => {
     const history = useHistory();
 
     const handleClick = () => {
@@ -23,10 +23,12 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ id, name, address }: Comm
     };
 
     return (
-        <StyledCard onClick={handleClick}>
-            <h1>{name}</h1>
-            <p>{address}</p>
-        </StyledCard>
+        <>
+            <StyledCard onClick={handleClick}>
+                <h1>{name}</h1>
+                <p>{address}</p>
+            </StyledCard>
+        </>
     );
 };
 

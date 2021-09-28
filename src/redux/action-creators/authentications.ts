@@ -39,11 +39,11 @@ export const signup = (signupParams: UserParamsType) => {
         } catch (err) {
             dispatch({
                 type: AuthActionType.SIGNUP_ERROR,
-                payload: err.message,
+                payload: `An error has occured ${err}`,
             });
             dispatch({
                 type: MessagesActionType.DISPLAY_ERROR_MESSAGE,
-                payload: err.message,
+                payload: `An error has occured ${err}`,
             });
         }
     };
@@ -78,31 +78,30 @@ export const login = (loginParams: UserParamsType) => {
             console.log('data', data);
             console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
 
-            if (!response.ok) {
-                throw new Error(data.error);
+            if (response.ok) {
+                const token = response.headers.get('authorization')?.split(' ')[1] || '';
+                if (token) {
+                    Cookies.set('token', token);
+                }
+                dispatch({
+                    type: AuthActionType.LOGIN_SUCCESS,
+                    payload: data,
+                });
+                dispatch({
+                    type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
+                    payload: message,
+                });
+            } else {
+                dispatch({
+                    type: AuthActionType.LOGIN_SUCCESS,
+                    payload: data,
+                });
+                dispatch({
+                    type: MessagesActionType.DISPLAY_ERROR_MESSAGE,
+                    payload: message,
+                });
             }
-            const token = response.headers.get('authorization')?.split(' ')[1] || '';
-            if (token) {
-                Cookies.set('token', token);
-            }
-            dispatch({
-                type: AuthActionType.LOGIN_SUCCESS,
-                payload: data,
-            });
-            dispatch({
-                type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
-                payload: message && 'Logged in',
-            });
-        } catch (err) {
-            dispatch({
-                type: AuthActionType.LOGIN_ERROR,
-                payload: err.message,
-            });
-            dispatch({
-                type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
-                payload: 'Login successfully',
-            });
-        }
+        } catch (err) {}
     };
 };
 
@@ -155,7 +154,7 @@ export const autoLogin = () => {
         } catch (err) {
             dispatch({
                 type: AuthActionType.LOGIN_ERROR,
-                payload: err.message,
+                payload: `An error has occured ${err}`,
             });
         }
     };
@@ -185,7 +184,7 @@ export const loadUser = () => {
         } catch (err) {
             dispatch({
                 type: AuthActionType.LOAD_USER_ERROR,
-                payload: err.message,
+                payload: `An error has occured ${err}`,
             });
         }
     };

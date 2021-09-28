@@ -1,6 +1,7 @@
 import React from 'react';
+import { JobType } from '../../../../../hooks/useFetch';
+import useFetch from '../../../../../hooks/useFetch';
 import { CommunityType } from '../../../../../redux/types';
-import useFetch, { JobType } from '../../../../../hooks/useFetch';
 import JobLine from './JobLine';
 
 type JobProps = {
@@ -14,7 +15,8 @@ const Job: React.FC<JobProps> = ({ community }: JobProps) => {
     const [duration, setDuration] = React.useState<number>(0);
     const [nbrOfPerson, setNbrOfPerson] = React.useState<number>(0);
     const [reload, setReload] = React.useState(0);
-    const { post, get, data: jobs, remove } = useFetch();
+    const { state, post, get, remove } = useFetch<JobType[]>();
+    const { data: jobs } = state;
     const [create, setCreate] = React.useState(false);
 
     const handleSubmit = async (e: React.FormEvent<EventTarget>) => {
@@ -32,17 +34,9 @@ const Job: React.FC<JobProps> = ({ community }: JobProps) => {
         setReload((prevReload) => prevReload + 1);
     };
 
-    const handleApply = async (id: number) => {
-        await post(`/communities/${community.id}/jobs/${id}/applies`, {});
-        setReload((prevReload) => prevReload + 1);
-    };
-
     React.useEffect(() => {
         get(`/communities/${community.id}/jobs`);
     }, [reload]);
-
-    // console.log('jobs', jobs);
-    // console.log('reload', reload);
 
     return (
         <>
@@ -97,7 +91,6 @@ const Job: React.FC<JobProps> = ({ community }: JobProps) => {
                                 duration_in_days={job.duration_in_days}
                                 nbr_of_person_required={job.nbr_of_person_required}
                                 community_id={community.id}
-                                handleApply={handleApply}
                             />
                         </li>
                     ))}

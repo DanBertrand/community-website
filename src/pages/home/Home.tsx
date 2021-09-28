@@ -3,7 +3,7 @@ import CommunityList from './CommunityList';
 import backgroundImage from '../..//assets/images/main-image.jpg';
 import { PageContainer } from '../../styles/index';
 
-const Home: React.FC = () => {
+const Home: React.VoidFunctionComponent = (): JSX.Element => {
     return (
         <PageContainer>
             <div
