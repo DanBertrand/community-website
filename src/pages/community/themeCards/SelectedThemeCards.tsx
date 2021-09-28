@@ -4,7 +4,7 @@ import { MainCard } from '../../../styles/index';
 // import Loading from '../../../components/Loading';
 
 const Product = React.lazy(() => import('./type/Product'));
-const Job = React.lazy(() => import('./type/Job'));
+const Job = React.lazy(() => import('./type/job/Job'));
 const Team = React.lazy(() => import('./type/team/Team'));
 const Location = React.lazy(() => import('./type/Location'));
 // const Project = React.lazy(() => import('./type/Project'));

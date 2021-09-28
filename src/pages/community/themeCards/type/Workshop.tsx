@@ -2,6 +2,7 @@ import React from 'react';
 import { CommunityType } from '../../../../redux/types';
 import useFetch, { WorkshopType } from '../../../../hooks/useFetch';
 import styled from 'styled-components';
+import { useTypedSelector } from '../../../../hooks/useTypedSelector';
 
 type WorkshopProps = {
     community: CommunityType;
@@ -9,11 +10,12 @@ type WorkshopProps = {
 };
 
 const Workshop: React.FC<WorkshopProps> = ({ community }: WorkshopProps) => {
+    const { user } = useTypedSelector((state) => state.authentication);
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [create, setCreate] = React.useState(false);
     const [reload, setReload] = React.useState(0);
-    const { post, get, data: workshops, remove } = useFetch();
+    const { post, get, data: workshops, patch, remove } = useFetch();
 
     const handleSubmit = async (e: React.FormEvent<EventTarget>) => {
         e.preventDefault();
@@ -23,10 +25,12 @@ const Workshop: React.FC<WorkshopProps> = ({ community }: WorkshopProps) => {
     };
 
     const handleApply = async (id: number) => {
-        await post(`/communities/${community.id}/workshops`, { workshop: { title, description } });
-        setReload((prevReload) => prevReload + 1);
-        console.log(id);
-        setCreate(false);
+        if (user) {
+            await patch(`/communities/${community.id}/workshops/${id}`, { workshop: { user_id: user.id } });
+            setReload((prevReload) => prevReload + 1);
+            console.log(id);
+            setCreate(false);
+        }
     };
 
     const handleDelete = async (id: number) => {

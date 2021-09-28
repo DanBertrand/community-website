@@ -42,7 +42,7 @@ const Community: React.FC<CommunityProps> = ({ match, user }: CommunityProps) =>
                 cardsList.push('Workshop');
             }
             if (community.has_jobs) {
-                cardsList.push('Jobs');
+                cardsList.push('Job');
             }
         }
         setCardsTitle(cardsList);

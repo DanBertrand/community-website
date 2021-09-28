@@ -1,6 +1,7 @@
 import React from 'react';
-import { CommunityType } from '../../../../redux/types';
-import useFetch, { JobType } from '../../../../hooks/useFetch';
+import { CommunityType } from '../../../../../redux/types';
+import useFetch, { JobType } from '../../../../../hooks/useFetch';
+import JobLine from './JobLine';
 
 type JobProps = {
     community: CommunityType;
@@ -23,6 +24,7 @@ const Job: React.FC<JobProps> = ({ community }: JobProps) => {
             job: { title, description, nbr_of_person_required: nbrOfPerson, duration_in_days: duration },
         });
         setReload((prevReload) => prevReload + 1);
+        setCreate(false);
     };
 
     const handleDelete = async (id: number) => {
@@ -31,18 +33,16 @@ const Job: React.FC<JobProps> = ({ community }: JobProps) => {
     };
 
     const handleApply = async (id: number) => {
-        await post(`/communities/${community.id}/workshops`, { workshop: { title, description } });
+        await post(`/communities/${community.id}/jobs/${id}/applies`, {});
         setReload((prevReload) => prevReload + 1);
-        console.log(id);
-        setCreate(false);
     };
 
     React.useEffect(() => {
         get(`/communities/${community.id}/jobs`);
     }, [reload]);
 
-    console.log('jobs', jobs);
-    console.log('reload', reload);
+    // console.log('jobs', jobs);
+    // console.log('reload', reload);
 
     return (
         <>
@@ -83,16 +83,26 @@ const Job: React.FC<JobProps> = ({ community }: JobProps) => {
                     <button type="submit">Create</button>
                 </form>
             )}
-            {jobs &&
-                jobs.map((j: JobType) => (
-                    <div key={j.id}>
-                        <p key={j.id}>{j.title}</p>
-                        <span>Duration: {j.duration_in_days}</span>
-                        <span>Number of person requierd: {j.nbr_of_person_required}</span>
-                        <input type="button" onClick={() => handleDelete(j.id)} value="X" />{' '}
-                        <input type="button" onClick={() => handleApply(j.id)} value="Apply" />{' '}
-                    </div>
-                ))}
+            {jobs && (
+                <ul>
+                    {jobs.map((job: JobType) => (
+                        <li key={job.id}>
+                            <JobLine
+                                key={job.id}
+                                id={job.id}
+                                users={job.users}
+                                title={job.title}
+                                handleDelete={handleDelete}
+                                description={job.description}
+                                duration_in_days={job.duration_in_days}
+                                nbr_of_person_required={job.nbr_of_person_required}
+                                community_id={community.id}
+                                handleApply={handleApply}
+                            />
+                        </li>
+                    ))}
+                </ul>
+            )}
         </>
     );
 };
