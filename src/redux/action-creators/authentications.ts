@@ -4,9 +4,9 @@ import { AuthActionType, MessagesActionType, UserParamsType } from '../types';
 import { AuthAction, MessagesAction } from '../actions';
 import { headers } from '../../tools/api';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-const API_VERSION_EXTENSION = process.env.REACT_APP_API_VERSION_EXTENSION;
-const API_URL = `${API_BASE_URL}${API_VERSION_EXTENSION}`;
+const API_VERSION_URL = process.env.REACT_APP_API_VERSION_URL;
+const HOST_URL = process.env.REACT_APP_HOST_URL;
+const API_URL = `${HOST_URL}${API_VERSION_URL}`;
 
 export const signup = (signupParams: UserParamsType) => {
     return async (dispatch: Dispatch<AuthAction | MessagesAction>): Promise<void> => {

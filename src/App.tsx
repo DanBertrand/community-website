@@ -26,7 +26,10 @@ const App: React.FC = () => {
     const { user } = useTypedSelector((state) => state.authentication);
     const { communities } = useTypedSelector((state) => state.communities);
     const { message, color } = useTypedSelector((state) => state.message);
-    const API_URL = process.env.REACT_APP_API_URL;
+
+    const API_VERSION_URL = process.env.REACT_APP_API_VERSION_URL;
+    const HOST_URL = process.env.REACT_APP_HOST_URL;
+    const API_URL = `${HOST_URL}${API_VERSION_URL}`;
 
     useEffect(() => {
         if (!user) {

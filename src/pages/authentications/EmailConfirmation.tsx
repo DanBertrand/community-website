@@ -10,10 +10,13 @@ const EmailConfirmation = (): JSX.Element => {
     const history = useHistory();
     const location = useLocation();
     const confirmationToken = location.search.split('=').pop();
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+    const API_VERSION_URL = process.env.REACT_APP_API_VERSION_URL;
+    const HOST_URL = process.env.REACT_APP_HOST_URL;
+    const API_URL = `${HOST_URL}${API_VERSION_URL}`;
 
     const confirmToken = async () => {
-        const resp = await fetch(`${API_BASE_URL}/confirmation?confirmation_token=${confirmationToken}`);
+        const resp = await fetch(`${HOST_URL}/confirmation?confirmation_token=${confirmationToken}`);
         console.log(resp);
         if (resp.ok) {
             setTimeout(() => {
@@ -30,7 +33,7 @@ const EmailConfirmation = (): JSX.Element => {
 
     const resendEmail = async () => {
         console.log('Resend Email');
-        const response = await fetch(`${API_BASE_URL}/user/confirmation/request_new_link/${confirmationToken}`, {
+        const response = await fetch(`${API_URL}/user/confirmation/request_new_link/${confirmationToken}`, {
             method: 'GET',
         });
         console.log(response);
