@@ -96,7 +96,11 @@ type Action<T> =
 function useFetch<T = unknown>(): FetchReturn<T> {
     const { displaySuccess, displayError } = useActions();
     const token = Cookies.get('token');
-    const API_URL = process.env.REACT_APP_API_URL;
+
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const API_VERSION_EXTENSION = process.env.REACT_APP_API_VERSION_EXTENSION;
+    const API_URL = `${API_BASE_URL}${API_VERSION_EXTENSION}`;
+
     const history = useHistory();
 
     const initialState: State<T> = {

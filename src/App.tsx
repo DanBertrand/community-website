@@ -28,10 +28,6 @@ const App: React.FC = () => {
     const { message, color } = useTypedSelector((state) => state.message);
     const API_URL = process.env.REACT_APP_API_URL;
 
-    console.log('*******************************************');
-    console.log(message);
-    console.log('*******************************************');
-
     useEffect(() => {
         if (!user) {
             autoLogin();
@@ -44,10 +40,6 @@ const App: React.FC = () => {
             loadCommunities();
         }
     }, [user]);
-
-    console.log('user', user);
-    console.log('user CONFIRMED AT', user?.confirmed_at);
-    console.log('communities', communities);
 
     const resendEmail = async () => {
         console.log('Resend Email');

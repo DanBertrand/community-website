@@ -4,7 +4,9 @@ import { AuthActionType, MessagesActionType, UserParamsType } from '../types';
 import { AuthAction, MessagesAction } from '../actions';
 import { headers } from '../../tools/api';
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const API_VERSION_EXTENSION = process.env.REACT_APP_API_VERSION_EXTENSION;
+const API_URL = `${API_BASE_URL}${API_VERSION_EXTENSION}`;
 
 export const signup = (signupParams: UserParamsType) => {
     return async (dispatch: Dispatch<AuthAction | MessagesAction>): Promise<void> => {
@@ -63,21 +65,7 @@ export const login = (loginParams: UserParamsType) => {
                     user: { email, password },
                 }),
             });
-
-            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-            console.log('response', response);
-            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-
             const { message, data } = await response.json();
-
-            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-            console.log('message', message);
-            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-
-            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-            console.log('data', data);
-            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-
             if (response.ok) {
                 const token = response.headers.get('authorization')?.split(' ')[1] || '';
                 if (token) {
@@ -142,15 +130,14 @@ export const autoLogin = () => {
                 Cookies.remove('token');
                 throw new Error(error);
             }
-
             dispatch({
                 type: AuthActionType.LOGIN_SUCCESS,
                 payload: data,
             });
-            // dispatch({
-            //     type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
-            //     payload: data,
-            // });
+            dispatch({
+                type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
+                payload: data,
+            });
         } catch (err) {
             dispatch({
                 type: AuthActionType.LOGIN_ERROR,
