@@ -7,7 +7,8 @@ import { UserType } from '../redux/types';
 
 interface State<T> {
     data?: T;
-    error?: Error;
+    error?: Error | unknown;
+    message?: string;
     isLoading: boolean;
 }
 
@@ -48,6 +49,8 @@ interface FetchReturn<T> {
     put: (query: string, body: UserBody, callback?: CallBack) => Promise<void>;
     remove: (query: string, body?: Url | undefined, callback?: CallBack) => Promise<void>;
     postAvatar: (query: string, body: FormData) => Promise<void>;
+    confirmToken: (query: string, callback: CallBack) => Promise<void>;
+    resendConfirmationEmail: (query: string, callback: CallBack) => Promise<void>;
 }
 
 type CommunityCreationBody = {
@@ -91,7 +94,8 @@ type Action<T> =
     | { type: 'posted' }
     | { type: 'patched' }
     | { type: 'deleted' }
-    | { type: 'error'; payload: Error };
+    | { type: 'error'; payload: Error | unknown }
+    | { type: 'message'; payload: string };
 
 function useFetch<T = unknown>(): FetchReturn<T> {
     const { displaySuccess, displayError } = useActions();
@@ -107,6 +111,7 @@ function useFetch<T = unknown>(): FetchReturn<T> {
         error: undefined,
         data: undefined,
         isLoading: false,
+        message: undefined,
     };
 
     const fetchReducer = (state: State<T>, action: Action<T>): State<T> => {
@@ -114,13 +119,15 @@ function useFetch<T = unknown>(): FetchReturn<T> {
             case 'loading':
                 return { ...initialState, isLoading: true };
             case 'got':
-                return { ...initialState, data: action.payload, isLoading: false };
+                return { ...state, data: action.payload, isLoading: false };
             case 'posted':
             case 'patched':
             case 'deleted':
                 return { ...state, isLoading: false };
             case 'error':
-                return { ...initialState, error: action.payload, isLoading: false };
+                return { ...state, error: action.payload, isLoading: false };
+            case 'message':
+                return { ...state, message: action.payload, isLoading: false };
             default:
                 return state;
         }
@@ -135,11 +142,13 @@ function useFetch<T = unknown>(): FetchReturn<T> {
                 method: 'GET',
                 headers: headers(token),
             });
+            const responseData = await response.json();
+            const { message } = responseData;
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
-            const responseData = await response.json();
             dispatch({ type: 'got', payload: responseData.data as T });
+            dispatch({ type: 'message', payload: message });
         } catch (error) {
             dispatch({ type: 'error', payload: error as Error });
         }
@@ -206,6 +215,7 @@ function useFetch<T = unknown>(): FetchReturn<T> {
     };
 
     const put = async (query: string, body: UserBody, callback?: CallBack) => {
+        dispatch({ type: 'loading' });
         try {
             const response = await fetch(API_URL + query, {
                 method: 'PUT',
@@ -227,6 +237,7 @@ function useFetch<T = unknown>(): FetchReturn<T> {
     };
 
     const patch = async (query: string, body: unknown, callback?: CallBack) => {
+        dispatch({ type: 'loading' });
         try {
             const response = await fetch(API_URL + query, {
                 method: 'PATCH',
@@ -250,6 +261,7 @@ function useFetch<T = unknown>(): FetchReturn<T> {
 
     // 'delete' is not allowed as a variable declaration name so I use remove
     const remove = async (query: string, body?: { url: string }, callback?: CallBack) => {
+        dispatch({ type: 'loading' });
         try {
             const response = await fetch(API_URL + query, {
                 method: 'DELETE',
@@ -271,6 +283,50 @@ function useFetch<T = unknown>(): FetchReturn<T> {
         }
     };
 
+    const confirmToken = async (query: string, callback: CallBack) => {
+        dispatch({ type: 'loading' });
+        try {
+            const response = await fetch(`${HOST_URL}${query}`, {
+                method: 'GET',
+            });
+            const responseData = await response.json();
+            const { message, error } = responseData;
+            if (!response.ok) {
+                dispatch({ type: 'error', payload: error });
+            } else {
+                dispatch({ type: 'got', payload: responseData.data as T });
+                dispatch({ type: 'message', payload: message });
+                if (callback) {
+                    callback();
+                }
+            }
+        } catch (error) {
+            dispatch({ type: 'error', payload: error });
+        }
+    };
+
+    const resendConfirmationEmail = async (query: string, callback: CallBack) => {
+        dispatch({ type: 'loading' });
+        try {
+            const response = await fetch(`${API_URL}${query}`, {
+                method: 'GET',
+            });
+            const responseData = await response.json();
+            const { message, error } = responseData;
+            if (!response.ok) {
+                dispatch({ type: 'error', payload: error });
+            } else {
+                dispatch({ type: 'got', payload: responseData.data as T });
+                dispatch({ type: 'message', payload: message });
+                if (callback) {
+                    callback();
+                }
+            }
+        } catch (error) {
+            dispatch({ type: 'error', payload: error });
+        }
+    };
+
     return {
         state,
         get,
@@ -279,6 +335,8 @@ function useFetch<T = unknown>(): FetchReturn<T> {
         remove,
         put,
         postAvatar,
+        confirmToken,
+        resendConfirmationEmail,
     };
 }
 
