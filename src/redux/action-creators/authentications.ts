@@ -134,10 +134,6 @@ export const autoLogin = () => {
                 type: AuthActionType.LOGIN_SUCCESS,
                 payload: data,
             });
-            dispatch({
-                type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
-                payload: data,
-            });
         } catch (err) {
             dispatch({
                 type: AuthActionType.LOGIN_ERROR,
