@@ -8,7 +8,6 @@ import { useTypedSelector } from './hooks/useTypedSelector';
 import { useActions } from './hooks/useActions';
 import PublicRoute from './components/route/PublicRoute';
 import PrivateRoute from './components/route/PrivateRoute';
-import { PageContainer } from './styles';
 import Loading from './components/Loading';
 const Register = React.lazy(() => import('./pages/authentications/Register'));
 const Login = React.lazy(() => import('./pages/authentications/Login'));
@@ -18,6 +17,7 @@ const Community = React.lazy(() => import('./pages/community/Community'));
 import EmailConfirmation from './pages/authentications/EmailConfirmation';
 import Modal from './components/Modal';
 import FlashMessage from './components/FlashMessage';
+import { PageContainer } from './styles';
 const { Suspense, useEffect, useState } = React;
 
 const App: React.FC = () => {
@@ -67,10 +67,9 @@ const App: React.FC = () => {
             <GlobalStyles />
             <Suspense fallback={<Loading size={'5em'} />}>
                 <Navbar user={user} communities={communities} />
-
-                {message && <FlashMessage color={color} message={message} />}
-
                 <PageContainer>
+                    {message && <FlashMessage color={color} message={message} />}
+
                     <PublicRoute restricted={false} user={user} component={Home} path="/" exact />
 
                     {user && !user.confirmed_at ? (

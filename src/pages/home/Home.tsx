@@ -1,11 +1,10 @@
 import React from 'react';
 import CommunityList from './CommunityList';
 import backgroundImage from '../..//assets/images/main-image.jpg';
-import { PageContainer } from '../../styles/index';
 
 const Home: React.VoidFunctionComponent = (): JSX.Element => {
     return (
-        <PageContainer>
+        <>
             <div
                 style={{
                     display: 'grid',
@@ -45,7 +44,7 @@ const Home: React.VoidFunctionComponent = (): JSX.Element => {
                     />
                 </div>
             </div>
-        </PageContainer>
+        </>
     );
 };
 

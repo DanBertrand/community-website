@@ -6,7 +6,7 @@ import { PublicRouteProps } from '../../components/route/PublicRoute';
 import { RouteComponentProps } from 'react-router-dom';
 import { RouteParams } from '../../components/route/types';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { ContentContainer, PageContainer } from '../../styles';
+import { ContentContainer } from '../../styles';
 import Loading from '../../components/Loading';
 // import { ImExit } from 'react-icons/im';
 // import { ImEnter } from 'react-icons/im';
@@ -98,10 +98,10 @@ const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
                     </ContentContainer>
                 </Modal>
             )} */}
-            <PageContainer>
-                {community ? (
-                    <ContentContainer grow={0}>
-                        {/* <Icon onClick={() => setIsModalOpen(true)} active={role ? true : false}>
+
+            {community ? (
+                <ContentContainer grow={0}>
+                    {/* <Icon onClick={() => setIsModalOpen(true)} active={role ? true : false}>
                             {role ? (
                                 <>
                                     <ImExit size={40} />
@@ -111,38 +111,37 @@ const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
                                 <ImEnter size={40} />
                             )}
                         </Icon> */}
-                        <Title>{community.name}</Title>
-                        <Description>{community.description}</Description>
-                        <ContentContainer alignItems={'center'}>
-                            {selectedThemeCard && (
-                                <WrapperSelected>
-                                    <SelectedThemeCard
-                                        community={community}
-                                        title={selectedThemeCard}
-                                        editingMode={editingMode}
-                                        toggleEditingMode={toggleEditingMode}
-                                        canEdit={role ? true : false}
-                                    />
-                                </WrapperSelected>
-                            )}
-                            <WrapperDefault>
-                                {cardsTitle?.map((title, index) => (
-                                    <NormalThemeCard
-                                        key={index}
-                                        selectedThemeCard={selectedThemeCard}
-                                        canEdit={role ? true : false}
-                                        handleSelect={handleSelect}
-                                        title={title}
-                                        editingMode={editingMode}
-                                    />
-                                ))}
-                            </WrapperDefault>
-                        </ContentContainer>
+                    <Title>{community.name}</Title>
+                    <Description>{community.description}</Description>
+                    <ContentContainer alignItems={'center'}>
+                        {selectedThemeCard && (
+                            <WrapperSelected>
+                                <SelectedThemeCard
+                                    community={community}
+                                    title={selectedThemeCard}
+                                    editingMode={editingMode}
+                                    toggleEditingMode={toggleEditingMode}
+                                    canEdit={role ? true : false}
+                                />
+                            </WrapperSelected>
+                        )}
+                        <WrapperDefault>
+                            {cardsTitle?.map((title, index) => (
+                                <NormalThemeCard
+                                    key={index}
+                                    selectedThemeCard={selectedThemeCard}
+                                    canEdit={role ? true : false}
+                                    handleSelect={handleSelect}
+                                    title={title}
+                                    editingMode={editingMode}
+                                />
+                            ))}
+                        </WrapperDefault>
                     </ContentContainer>
-                ) : (
-                    <Loading />
-                )}
-            </PageContainer>
+                </ContentContainer>
+            ) : (
+                <Loading />
+            )}
         </>
     );
 };
