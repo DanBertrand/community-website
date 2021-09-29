@@ -1,11 +1,8 @@
 import reportWebVitals from './reportWebVitals';
-// import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { store } from './redux';
-// import Loading from './components/Loading';
 import App from './App';
-// const App = React.lazy(() => import('./App'));
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import EmailConfirmation from './pages/authentications/EmailConfirmation';
 
