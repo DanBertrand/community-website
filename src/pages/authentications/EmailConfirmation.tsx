@@ -15,22 +15,6 @@ const EmailConfirmation = (): JSX.Element => {
     const HOST_URL = process.env.REACT_APP_HOST_URL;
     const API_URL = `${HOST_URL}${API_VERSION_URL}`;
 
-    const confirmToken = async () => {
-        const resp = await fetch(`${HOST_URL}/confirmation?confirmation_token=${confirmationToken}`);
-        console.log(resp);
-        if (resp.ok) {
-            setTimeout(() => {
-                history.push('/login');
-            }, 3000);
-        }
-        const data = await resp.json();
-        console.log('response token', data);
-        const { message, error } = data;
-        message && setMessage(message);
-        error && setError(error);
-        setDidFetch(true);
-    };
-
     const resendEmail = async () => {
         console.log('Resend Email');
         const response = await fetch(`${API_URL}/user/confirmation/request_new_link/${confirmationToken}`, {
@@ -42,6 +26,21 @@ const EmailConfirmation = (): JSX.Element => {
     };
 
     React.useEffect(() => {
+        const confirmToken = async () => {
+            const resp = await fetch(`${HOST_URL}/confirmation?confirmation_token=${confirmationToken}`);
+            console.log(resp);
+            if (resp.ok) {
+                setTimeout(() => {
+                    history.push('/login');
+                }, 3000);
+            }
+            const data = await resp.json();
+            console.log('response token', data);
+            const { message, error } = data;
+            message && setMessage(message);
+            error && setError(error);
+            setDidFetch(true);
+        };
         confirmToken();
     }, []);
 
