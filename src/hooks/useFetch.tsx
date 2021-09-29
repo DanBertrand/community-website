@@ -1,9 +1,9 @@
 import Cookies from 'js-cookie';
 import { useReducer } from 'react';
-import { headers } from '../tools/api';
-import { useActions } from './useActions';
+import { headers } from '../helpers/api';
+import { useActions } from 'hooks';
 import { useHistory } from 'react-router-dom';
-import { UserType } from '../redux/types';
+import { UserType } from 'store/types';
 
 interface State<T> {
     data?: T;
@@ -97,7 +97,7 @@ type Action<T> =
     | { type: 'error'; payload: Error | unknown }
     | { type: 'message'; payload: string };
 
-function useFetch<T = unknown>(): FetchReturn<T> {
+export function useFetch<T = unknown>(): FetchReturn<T> {
     const { displaySuccess, displayError } = useActions();
     const token = Cookies.get('token');
 
@@ -339,5 +339,3 @@ function useFetch<T = unknown>(): FetchReturn<T> {
         resendConfirmationEmail,
     };
 }
-
-export default useFetch;
