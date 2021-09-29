@@ -6,12 +6,21 @@ import { store } from './redux';
 // import Loading from './components/Loading';
 import App from './App';
 // const App = React.lazy(() => import('./App'));
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import EmailConfirmation from './pages/authentications/EmailConfirmation';
 
 ReactDOM.render(
     <Provider store={store}>
         {/* <React.StrictMode> */}
         {/* <Suspense fallback={<Loading size={'5em'} />}> */}
-        <App />
+        <Router>
+            <Switch>
+                <Route path="/confirmation">
+                    <EmailConfirmation />
+                </Route>
+                <App />
+            </Switch>
+        </Router>
         {/* </Suspense> */}
         {/* </React.StrictMode> */}
     </Provider>,
