@@ -52,7 +52,8 @@ const CreateCommunity: React.FC = () => {
                 city,
                 state,
                 country,
-                formatted_address: location.formatted_address,
+                formatted_address:
+                    location.formatted_address || `${houseNumber} ${street} ${postCode} ${city} ${state} ${country}`,
                 latitude: location.latitude,
                 longitude: location.longitude,
             },
