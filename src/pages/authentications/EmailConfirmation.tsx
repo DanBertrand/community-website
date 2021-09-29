@@ -42,7 +42,7 @@ const EmailConfirmation = (): JSX.Element => {
             setDidFetch(true);
         };
         confirmToken();
-    }, []);
+    }, [confirmationToken]);
 
     if (!didFetch) {
         return <Loading />;
