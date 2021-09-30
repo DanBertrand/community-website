@@ -47,7 +47,7 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "check-types": "tsc",
-        "test": "jest",
+        "test": "jest --watchAll --verbose --coverage",
         "eject": "react-scripts eject"
     },
     "eslintConfig": {
@@ -80,6 +80,7 @@
         "eslint-plugin-react": "^7.24.0",
         "msw": "^0.35.0",
         "prettier": "^2.3.2",
+        "react-test-renderer": "^17.0.2",
         "ts-jest": "^26.5.6",
         "tsconfig-paths-webpack-plugin": "^3.5.1"
     },

@@ -9,8 +9,6 @@ import React from 'react';
 
 ReactDOM.render(
     <Provider store={store}>
-        {/* <React.StrictMode> */}
-        {/* <Suspense fallback={<Loading size={'5em'} />}> */}
         <Router>
             <Switch>
                 <Route path="/confirmation">
@@ -19,9 +17,8 @@ ReactDOM.render(
                 <App />
             </Switch>
         </Router>
-        {/* </Suspense> */}
-        {/* </React.StrictMode> */}
     </Provider>,
+
     document.getElementById('root'),
 );
 

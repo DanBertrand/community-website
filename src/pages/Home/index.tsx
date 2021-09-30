@@ -1,6 +1,6 @@
 import React from 'react';
 import CommunityList from './CommunityList';
-import backgroundImage from '../..//assets/images/main-image.jpg';
+import backgroundImage from 'assets/images/main-image.jpg';
 
 const Home: React.VoidFunctionComponent = (): JSX.Element => {
     return (
