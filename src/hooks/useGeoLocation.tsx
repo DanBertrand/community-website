@@ -67,3 +67,9 @@ export const useGeoLocation = (): UseGeoLocationReturn => {
 
     return { coordinates, permission, errors };
 };
+
+// console.log('***************************  GEO LOCATION  **************************************');
+// console.log('Coordinates', coordinates);
+// console.log('Permission', permission);
+// console.log('Errors', errors);
+// console.log('***************************************************************************');

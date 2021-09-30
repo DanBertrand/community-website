@@ -33,3 +33,14 @@ export const useClientInfos = (): ClientInfos => {
 
     return clientInfos;
 };
+
+{
+    /* <span style={{ fontSize: '2em', color: 'red' }}>IP: {IPv4}</span>
+<span style={{ fontSize: '2em', color: 'red' }}>City: {city}</span>
+<span style={{ fontSize: '2em', color: 'red' }}>{country_code}</span>
+<span style={{ fontSize: '2em', color: 'red' }}>Country: {country_name}</span>
+<span style={{ fontSize: '2em', color: 'red' }}>Lat: {latitude}</span>
+<span style={{ fontSize: '2em', color: 'red' }}>Lng: {longitude}</span>
+<span style={{ fontSize: '2em', color: 'red' }}>Postal: {postal}</span>
+<span style={{ fontSize: '2em', color: 'red' }}>State: {state}</span> */
+}
