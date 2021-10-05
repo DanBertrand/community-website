@@ -43,7 +43,7 @@ export const DropdownWrapper = styled.div`
     justify-content: flex-start;
 `;
 
-export const StyledSelect = styled.select`
+export const StyledSelect = styled.div`
     height: 100%;
     padding: 0.5rem;
 `;
