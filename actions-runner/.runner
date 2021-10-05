@@ -1,9 +1,0 @@
-﻿{
-  "agentId": 21,
-  "agentName": "Dan",
-  "poolId": 1,
-  "poolName": "Default",
-  "serverUrl": "https://pipelines.actions.githubusercontent.com/yIY4hCw8GlDi4r6BqAtvkuNSC7p6M4pzgzxSSXuCYEYPRsE2V7",
-  "gitHubUrl": "https://github.com/DanBertrand/community-website",
-  "workFolder": "_work"
-}
