@@ -26,8 +26,7 @@ Learning Typescript by myself, I wanted to create a real project with React, Red
 
 
 
-https://github.com/<OWNER>/<REPOSITORY>/workflows/<WORKFLOW_NAME>/badge.svg
-https://github.com/<danbertrand>/<community-website>/actions/workflows/<main.yml>/badge.svg
-![CI/CD](https://github.com/dyarleniber/react-workflow-gh-actions/workflows/CI/CD/badge.svg)
+
+![CI/CD](https://github.com/danbertrand/community-website/CI/CD/badge.svg)
   
   
