@@ -18,7 +18,6 @@ const initialState: CommunityStateType = {
 };
 
 const communitiesReducer = (state = initialState, action: CommunitiesAction): CommunityStateType => {
-    console.log('COMMUNITY REDUCER', action);
     switch (action.type) {
         case CommunitiesActionType.LOAD_COMMUNITIES_ATTEMPT:
             return {

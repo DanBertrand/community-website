@@ -54,6 +54,7 @@ export const signup = (signupParams: UserParamsType) => {
 export const login = (loginParams: UserParamsType) => {
     return async (dispatch: Dispatch<AuthAction | MessagesAction>): Promise<void> => {
         const { email, password } = loginParams;
+
         dispatch({
             type: AuthActionType.LOGIN_ATTEMPT,
         });
@@ -81,7 +82,7 @@ export const login = (loginParams: UserParamsType) => {
                 });
             } else {
                 dispatch({
-                    type: AuthActionType.LOGIN_SUCCESS,
+                    type: AuthActionType.LOGIN_ERROR,
                     payload: data,
                 });
                 dispatch({

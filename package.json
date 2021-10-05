@@ -6,7 +6,7 @@
         "@iconify/react": "^3.0.1",
         "@material-ui/core": "^4.12.3",
         "@sideway/address": "^4.1.2",
-        "@testing-library/dom": "8.7.0",
+        "@testing-library/dom": "^8.7.0",
         "@testing-library/jest-dom": "^5.14.1",
         "@testing-library/react": "^12.1.0",
         "@testing-library/user-event": "^12.1.10",
@@ -21,10 +21,12 @@
         "@types/react-redux": "^7.1.18",
         "@types/react-router-dom": "^5.1.8",
         "@types/redux": "^3.6.0",
+        "babel-jest": "^26.6.0",
         "formik": "^2.2.9",
         "google-map-react": "^2.1.10",
         "install-peers": "^1.0.3",
         "jest": "26.6.0",
+        "jest-fetch-mock": "^3.0.3",
         "joi": "^17.4.2",
         "js-cookie": "^2.2.1",
         "react": "17.0.0",
@@ -41,13 +43,15 @@
         "typescript": "^4.1.2",
         "uuid": "7.0.0",
         "web-vitals": "^1.0.1",
+        "whatwg-fetch": "^3.6.2",
         "yup": "^0.32.9"
     },
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
         "check-types": "tsc",
-        "test": "jest --watchAll --verbose --coverage",
+        "test": "jest -u --colors --verbose",
+        "test:all": "jest --watchAll --verbose --coverage",
         "eject": "react-scripts eject"
     },
     "eslintConfig": {
@@ -69,6 +73,8 @@
         ]
     },
     "devDependencies": {
+        "@types/node-fetch": "^3.0.3",
+        "@types/redux-mock-store": "^1.0.3",
         "@types/styled-components": "^5.1.11",
         "@types/testing-library__jest-dom": "^5.14.1",
         "@types/testing-library__react": "^10.2.0",
@@ -81,6 +87,7 @@
         "msw": "^0.35.0",
         "prettier": "^2.3.2",
         "react-test-renderer": "^17.0.2",
+        "redux-mock-store": "^1.5.4",
         "ts-jest": "^26.5.6",
         "tsconfig-paths-webpack-plugin": "^3.5.1"
     },

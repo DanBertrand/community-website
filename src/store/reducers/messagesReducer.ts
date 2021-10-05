@@ -11,8 +11,7 @@ const initialState: MessageStateType = {
     message: '',
 };
 
-const communitiesReducer = (state = initialState, action: MessagesAction): MessageStateType => {
-    console.log('COMMUNITY REDUCER', action);
+const massagesReducer = (state = initialState, action: MessagesAction): MessageStateType => {
     switch (action.type) {
         case MessagesActionType.DISPLAY_SUCCESS_MESSAGE:
             return {
@@ -34,4 +33,4 @@ const communitiesReducer = (state = initialState, action: MessagesAction): Messa
     }
 };
 
-export default communitiesReducer;
+export default massagesReducer;
