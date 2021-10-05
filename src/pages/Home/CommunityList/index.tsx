@@ -34,4 +34,4 @@ const CommunityList: React.VoidFunctionComponent = (): JSX.Element => {
     }
 };
 
-export default CommunityList;
+export default React.memo(CommunityList);

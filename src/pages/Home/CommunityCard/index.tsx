@@ -32,7 +32,7 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ id, name, address }: Comm
     );
 };
 
-export default CommunityCard;
+export default React.memo(CommunityCard);
 
 const StyledCard = styled.div`
     border: solid black;

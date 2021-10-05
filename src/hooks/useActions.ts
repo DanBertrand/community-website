@@ -1,8 +1,8 @@
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../store';
+import { store } from '../store/store';
 
 export const useActions = (): typeof actionCreators => {
-    const dispatch = useDispatch();
-    return bindActionCreators(actionCreators, dispatch);
+    return bindActionCreators(actionCreators, store.dispatch);
 };
