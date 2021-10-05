@@ -25,4 +25,4 @@ Warm idea for a win win situation
 
 Learning Typescript by myself, I wanted to create a real project with React, Redux, Typescript ...
 
-https://github.com/<DanBertrand>/<community-website>/workflows/<main.yml>/badge.svg
+https://github.com/<danbertrand>/<community-website>/workflows/<main.yml>/badge.svg
