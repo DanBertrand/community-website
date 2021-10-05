@@ -1,3 +1,4 @@
+![CI / CD](https://github.com/danbertrand/community-website/actions/workflows/main.yml/badge.svg)
 # Community Connector
 
 
@@ -25,6 +26,3 @@ Warm idea for a win win situation
 Learning Typescript by myself, I wanted to create a real project with React, Redux, Typescript ...
 
 
-
-![CI / CD](https://github.com/danbertrand/community-website/actions/workflows/main.yml/badge.svg)
-![example workflow](https://github.com/danbertrand/community-website/actions/workflows/main.yml/badge.svg)
