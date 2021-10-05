@@ -13,7 +13,6 @@ describe('Login Middleware', () => {
     });
     it('should create an action to start the fetch of a random fact and another action to mark the success of the fetch', async () => {
         const reduxStore = mockStore({});
-
         const mockResponse = { message: 'Logged in successfully', data: { user: { id: 1, email: 'Dan' } } };
         const expectedActions = [
             { type: AuthActionType.LOGIN_ATTEMPT },
