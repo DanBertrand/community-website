@@ -1,5 +1,6 @@
 import { render, RenderResult } from '@testing-library/react';
 import CommunityCard from 'pages/Home/CommunityCard';
+import React from 'react';
 
 let documentBody: RenderResult;
 describe('<CommunityCard />', () => {
