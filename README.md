@@ -31,3 +31,5 @@ https://github.com/danbertrand/community-website/badge.svg
  
   
 ![CI/CD](https://github.com/danbertrand/community-website/badge.svg)
+
+![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
