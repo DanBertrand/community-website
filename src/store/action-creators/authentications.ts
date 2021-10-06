@@ -22,32 +22,31 @@ export const signup = (signupParams: UserParamsType) => {
                     user: { email, password },
                 }),
             });
-            const { error, data } = await response.json();
+            const { message, data } = await response.json();
             if (!response.ok) {
-                throw new Error(error);
+                dispatch({
+                    type: AuthActionType.SIGNUP_ERROR,
+                    payload: message,
+                });
+                dispatch({
+                    type: MessagesActionType.DISPLAY_ERROR_MESSAGE,
+                    payload: message,
+                });
+            } else {
+                const token = response.headers.get('authorization')?.split(' ')[1] || '';
+                if (token) {
+                    Cookies.set('token', token);
+                }
+                dispatch({
+                    type: AuthActionType.SIGNUP_SUCCESS,
+                    payload: data,
+                });
+                dispatch({
+                    type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
+                    payload: message,
+                });
             }
-            const token = response.headers.get('authorization')?.split(' ')[1] || '';
-            if (token) {
-                Cookies.set('token', token);
-            }
-            dispatch({
-                type: AuthActionType.SIGNUP_SUCCESS,
-                payload: data,
-            });
-            dispatch({
-                type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
-                payload: 'Sign up Successfully',
-            });
-        } catch (err) {
-            dispatch({
-                type: AuthActionType.SIGNUP_ERROR,
-                payload: `An error has occured ${err}`,
-            });
-            dispatch({
-                type: MessagesActionType.DISPLAY_ERROR_MESSAGE,
-                payload: `An error has occured ${err}`,
-            });
-        }
+        } catch (err) {}
     };
 };
 
@@ -83,7 +82,7 @@ export const login = (loginParams: UserParamsType) => {
             } else {
                 dispatch({
                     type: AuthActionType.LOGIN_ERROR,
-                    payload: data,
+                    payload: message,
                 });
                 dispatch({
                     type: MessagesActionType.DISPLAY_ERROR_MESSAGE,
@@ -97,17 +96,18 @@ export const login = (loginParams: UserParamsType) => {
 export const logout = () => {
     return async (dispatch: Dispatch<AuthAction | MessagesAction>): Promise<void> => {
         const token = Cookies.get('token');
-        fetch(`${API_URL}/logout`, {
+        const response = await fetch(`${API_URL}/logout`, {
             method: 'DELETE',
             headers: headers(token),
         });
+        const { message } = await response.json();
         Cookies.remove('token');
         dispatch({
             type: AuthActionType.LOGOUT,
         });
         dispatch({
             type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
-            payload: 'Logout successfully',
+            payload: message,
         });
     };
 };
