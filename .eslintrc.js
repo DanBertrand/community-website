@@ -21,7 +21,7 @@ module.exports = {
     },
     env: {
         browser: true,
-        jest: true, // ADD THIS
+        jest: true,
     },
     settings: {
         react: {
