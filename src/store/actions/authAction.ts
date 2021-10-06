@@ -46,19 +46,19 @@ interface LoadUserError {
     payload: string;
 }
 
-interface DeleteUserAttempt {
-    type: AuthActionType.DELETE_USER_ATTEMPT;
-}
+// interface DeleteUserAttempt {
+//     type: AuthActionType.DELETE_USER_ATTEMPT;
+// }
 
-interface DeleteUserSuccess {
-    type: AuthActionType.DELETE_USER_SUCCESS;
-    payload: string;
-}
+// interface DeleteUserSuccess {
+//     type: AuthActionType.DELETE_USER_SUCCESS;
+//     payload: string;
+// }
 
-interface DeleteUserError {
-    type: AuthActionType.DELETE_USER_ERROR;
-    payload: string;
-}
+// interface DeleteUserError {
+//     type: AuthActionType.DELETE_USER_ERROR;
+//     payload: string;
+// }
 
 export type AuthAction =
     | LoginAttempt
@@ -70,7 +70,7 @@ export type AuthAction =
     | SignUpError
     | LoadUserAttempt
     | LoadUserSuccess
-    | LoadUserError
-    | DeleteUserAttempt
-    | DeleteUserSuccess
-    | DeleteUserError;
+    | LoadUserError;
+// | DeleteUserAttempt
+// | DeleteUserSuccess
+// | DeleteUserError;
