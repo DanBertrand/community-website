@@ -124,23 +124,20 @@ export const autoLogin = () => {
                 method: 'POST',
                 headers: headers(token),
             });
-            console.log('response', response);
-
-            const { error, data } = await response.json();
+            const { message, data } = await response.json();
             if (!response.ok) {
                 Cookies.remove('token');
-                throw new Error(error);
+                dispatch({
+                    type: AuthActionType.LOGIN_ERROR,
+                    payload: message,
+                });
+            } else {
+                dispatch({
+                    type: AuthActionType.LOGIN_SUCCESS,
+                    payload: data,
+                });
             }
-            dispatch({
-                type: AuthActionType.LOGIN_SUCCESS,
-                payload: data,
-            });
-        } catch (err) {
-            dispatch({
-                type: AuthActionType.LOGIN_ERROR,
-                payload: `An error has occured ${err}`,
-            });
-        }
+        } catch (err) {}
     };
 };
 
@@ -156,20 +153,19 @@ export const loadUser = () => {
                 method: 'GET',
                 headers: headers(token),
             });
-            const { error, data } = await response.json();
+            const { message, data } = await response.json();
             if (!response.ok) {
                 Cookies.remove('token');
-                throw new Error(error);
+                dispatch({
+                    type: AuthActionType.LOAD_USER_ERROR,
+                    payload: message,
+                });
+            } else {
+                dispatch({
+                    type: AuthActionType.LOAD_USER_SUCCESS,
+                    payload: data,
+                });
             }
-            dispatch({
-                type: AuthActionType.LOAD_USER_SUCCESS,
-                payload: data,
-            });
-        } catch (err) {
-            dispatch({
-                type: AuthActionType.LOAD_USER_ERROR,
-                payload: `An error has occured ${err}`,
-            });
-        }
+        } catch (err) {}
     };
 };

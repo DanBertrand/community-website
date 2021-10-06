@@ -44,6 +44,11 @@ const authReducer = (state = initialState, action: AuthAction): AuthStateType =>
                 isLoading: false,
             };
         case AuthActionType.LOAD_USER_ERROR:
+            return {
+                user: null,
+                errorMessage: action.payload,
+                isLoading: false,
+            };
         case AuthActionType.LOGOUT:
             return {
                 user: null,
