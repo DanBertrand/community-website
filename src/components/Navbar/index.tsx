@@ -95,7 +95,7 @@ const Container = styled.div<ContainerProps>`
     top: 0;
     width: 100%;
     background-color: #424949;
-    transition: all .7s ease-in;
+    transition: all 0.7s ease-in;
     box-shadow: ${({ scrollPosition }) => (scrollPosition < 20 ? 'none' : '0px 3px  #F8C471 ')};
     position: sticky;
     display: flex;
@@ -103,5 +103,6 @@ const Container = styled.div<ContainerProps>`
     justify-content: space-evenly;
     z-index: 10;
     @media only screen and (max-width: 768px) {
-    flex-direction:column;
+        flex-direction: column;
+    }
 `;
