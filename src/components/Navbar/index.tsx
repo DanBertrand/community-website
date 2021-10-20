@@ -47,6 +47,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, communities }: NavbarProps) => {
     const currentPathID = parseInt(currentPath.replace(/\D+/g, ''));
 
     console.log('NAVBAR');
+    console.log('communities?.data && communities?.data.length > 0', communities?.data && communities?.data.length > 0);
 
     return (
         <Container scrollPosition={scrollPosition}>

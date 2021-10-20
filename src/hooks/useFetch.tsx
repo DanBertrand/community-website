@@ -18,11 +18,6 @@ type Url = {
 
 type CallBack = () => void;
 
-type AvatarPost = {
-    image: File;
-    password: string;
-};
-
 type UserBody = {
     account_update: {
         first_name: string;
@@ -42,7 +37,7 @@ interface FetchReturn<T> {
     get: (query: string) => void;
     post: (
         query: string,
-        body: CommunityCreationBody | WorkshopCreationBody | JobCreationBody | AvatarPost,
+        body: CommunityCreationBody | WorkshopCreationBody | JobCreationBody,
         callback?: CallBack,
     ) => void;
     patch: (query: string, body: unknown, callback?: CallBack) => Promise<void>;
@@ -156,7 +151,7 @@ export function useFetch<T = unknown>(): FetchReturn<T> {
 
     const post = async (
         query: string,
-        body: CommunityCreationBody | WorkshopCreationBody | JobCreationBody | AvatarPost,
+        body: CommunityCreationBody | WorkshopCreationBody | JobCreationBody,
         callback?: CallBack,
     ) => {
         dispatch({ type: 'loading' });

@@ -20,10 +20,11 @@ export const displayError = (message: string) => {
     };
 };
 
-export const removeMessage = () => {
+export const removeMessage = (message: string) => {
     return async (dispatch: Dispatch<MessagesAction>): Promise<void> => {
         dispatch({
             type: MessagesActionType.REMOVE_MESSAGE,
+            payload: message,
         });
     };
 };

@@ -17,14 +17,14 @@ const Community = React.lazy(() => import('pages/Community'));
 import EmailConfirmation from 'pages/authentications/EmailConfirmation';
 import Modal from 'components/Modal';
 import FlashMessage from 'components/FlashMessage';
-import { PageContainer } from 'styles';
+import { MessageContainer, PageContainer } from 'styles';
 const { Suspense, useEffect, useState } = React;
 
 const App: React.FC = () => {
     const { autoLogin, loadCommunities } = useActions();
     const { user } = useTypedSelector((state) => state.authentication);
     const { communities } = useTypedSelector((state) => state.communities);
-    const { message, color } = useTypedSelector((state) => state.message);
+    const { messages } = useTypedSelector((state) => state.message);
 
     const [counter, setCounter] = useState(1);
 
@@ -68,7 +68,13 @@ const App: React.FC = () => {
             <Suspense fallback={<Loading size={'5em'} />}>
                 <Navbar user={user} communities={communities} />
                 <PageContainer>
-                    {message && <FlashMessage color={color} message={message} />}
+                    {messages && (
+                        <MessageContainer>
+                            {messages.map((msg, index) => (
+                                <FlashMessage key={index} content={msg.content} color={msg.color} />
+                            ))}
+                        </MessageContainer>
+                    )}
 
                     <PublicRoute restricted={false} user={user} component={Home} path="/" exact />
 

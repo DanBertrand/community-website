@@ -10,8 +10,9 @@ interface DisplayErrorMessage {
     payload: string;
 }
 
-interface CleanMessage {
+interface RemoveMessage {
     type: MessagesActionType.REMOVE_MESSAGE;
+    payload: string;
 }
 
-export type MessagesAction = DisplaySuccessMessage | DisplayErrorMessage | CleanMessage;
+export type MessagesAction = DisplaySuccessMessage | DisplayErrorMessage | RemoveMessage;

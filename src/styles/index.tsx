@@ -73,3 +73,13 @@ export const Column = styled.div`
     justify-content: space-evenly;
     align-items: center;
 `;
+
+export const MessageContainer = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+`;

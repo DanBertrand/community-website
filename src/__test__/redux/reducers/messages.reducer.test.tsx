@@ -1,26 +1,25 @@
 import messagesReducer, { MessageStateType } from 'store/reducers/messagesReducer';
+import { MessagesAction } from 'store/actions';
 import { MessagesActionType } from 'store/types';
 import { message } from '__test__/___mock___/data';
 
 const initialState: MessageStateType = {
-    color: '',
-    message: '',
+    messages: [],
 };
 
 describe('Messages Reducer', () => {
     it('should return the initial state', () => {
-        expect(messagesReducer(initialState, {} as any)).toEqual(initialState);
+        expect(messagesReducer(initialState, {} as MessagesAction)).toEqual(initialState);
     });
 
     it('should handle DISPLAY_SUCCESS_MESSAGE ', () => {
         expect(
             messagesReducer(initialState, {
                 type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
-                payload: 'Successful action',
+                payload: message.success,
             }),
         ).toEqual({
-            message: message.success,
-            color: 'green',
+            messages: [{ content: message.success, color: 'green' }],
         });
     });
     it('should handle DISPLAY_ERROR_MESSAGE ', () => {
@@ -30,18 +29,30 @@ describe('Messages Reducer', () => {
                 payload: message.error,
             }),
         ).toEqual({
-            message: message.error,
-            color: 'red',
+            messages: [
+                {
+                    content: message.error,
+                    color: 'red',
+                },
+            ],
         });
     });
     it('should handle REMOVE_MESSAGE ', () => {
         expect(
-            messagesReducer(initialState, {
-                type: MessagesActionType.REMOVE_MESSAGE,
-            }),
+            messagesReducer(
+                {
+                    messages: [
+                        { content: 'I want to REMOVE this one', color: 'brown' },
+                        { content: 'I want to KEEP this one', color: 'green' },
+                    ],
+                },
+                {
+                    type: MessagesActionType.REMOVE_MESSAGE,
+                    payload: 'I want to REMOVE this one',
+                },
+            ),
         ).toEqual({
-            color: '',
-            message: '',
+            messages: [{ content: 'I want to KEEP this one', color: 'green' }],
         });
     });
 });

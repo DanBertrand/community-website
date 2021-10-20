@@ -6,6 +6,8 @@ import App from './App';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import EmailConfirmation from 'pages/authentications/EmailConfirmation';
 import React from 'react';
+import LogRocket from 'logrocket';
+LogRocket.init('jhe5a4/dan');
 
 ReactDOM.render(
     <Provider store={store}>

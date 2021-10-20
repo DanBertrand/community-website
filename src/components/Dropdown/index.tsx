@@ -14,11 +14,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ handleSelect, children }: Dr
         handleSelect(newValue);
     };
 
-    return (
-        <DropdownWrapper>
-            <StyledSelect onClick={handleChange}>{children}</StyledSelect>
-        </DropdownWrapper>
-    );
+    return <StyledSelect onClick={handleChange}>{children}</StyledSelect>;
 };
 
 type OptionProps = {
@@ -43,7 +39,7 @@ export const DropdownWrapper = styled.div`
     justify-content: flex-start;
 `;
 
-export const StyledSelect = styled.div`
+export const StyledSelect = styled.select`
     height: 100%;
     padding: 0.5rem;
 `;

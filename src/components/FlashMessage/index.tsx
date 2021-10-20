@@ -1,22 +1,20 @@
 import React from 'react';
-import { MessageStateType } from 'store/reducers/messagesReducer';
 import styled from 'styled-components';
 import { useActions } from 'hooks';
+import { Message } from 'store/reducers/messagesReducer';
 
-type FlashMessageProps = MessageStateType;
-
-const FlashMessage: React.FC<FlashMessageProps> = ({ color, message }: FlashMessageProps) => {
+const FlashMessage: React.FC<Message> = ({ content, color }: Message) => {
     const { removeMessage } = useActions();
 
-    console.log('MESSAGE', message);
-
-    setTimeout(() => {
-        removeMessage();
-    }, 3000);
+    React.useEffect(() => {
+        setTimeout(() => {
+            removeMessage(content);
+        }, 4000);
+    }, []);
 
     return (
-        <StyledMessage color={color} className="FlashMessage">
-            <span>{message}</span>
+        <StyledMessage onClick={() => removeMessage(content)} color={color} className="FlashMessage">
+            <span>{content}</span>
         </StyledMessage>
     );
 };
@@ -29,12 +27,15 @@ type StyledMessageProps = {
 
 const StyledMessage = styled.div<StyledMessageProps>`
     background-color: ${({ color }) => color};
-    /* padding-top: 80px; */
-    font-size: large;
-    width: 100%;
-    position: sticky;
-    top: 0;
-
-    left: 0;
-    z-index: 3;
+    display: flex;
+    font-size: 1em;
+    flex-grow: 1;
+    min-height: 60px;
+    align-items: center;
+    margin-bottom: 0.2em;
+    padding: 5px;
+    box-shadow: 5px 5px 5px black;
+    &:hover {
+        cursor: pointer;
+    }
 `;
