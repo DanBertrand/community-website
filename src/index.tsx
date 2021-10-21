@@ -6,8 +6,9 @@ import App from './App';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import EmailConfirmation from 'pages/authentications/EmailConfirmation';
 import React from 'react';
-import LogRocket from 'logrocket';
-LogRocket.init('jhe5a4/dan');
+import './i18n';
+// import LogRocket from 'logrocket';
+// LogRocket.init('jhe5a4/dan');
 
 ReactDOM.render(
     <Provider store={store}>
@@ -27,4 +28,4 @@ ReactDOM.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+reportWebVitals(console.log);

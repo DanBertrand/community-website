@@ -36,7 +36,6 @@ const App: React.FC = () => {
         if (!user) {
             autoLogin();
         }
-        console.log('APP LOADED');
     }, []);
 
     useEffect(() => {
@@ -46,14 +45,9 @@ const App: React.FC = () => {
     }, [user]);
 
     const resendEmail = async () => {
-        console.log('Resend Email');
-
-        const response = await fetch(`${API_URL}/user/confirmation/request_new_link/${user?.confirmation_token}`, {
+        fetch(`${API_URL}/user/confirmation/request_new_link/${user?.confirmation_token}`, {
             method: 'GET',
         });
-        console.log(response);
-        const data = await response.json();
-        console.log('response USER', data.data);
     };
 
     console.log(`%c APP RENDERED : ${counter} times`, 'background: #222; color: #bada55');

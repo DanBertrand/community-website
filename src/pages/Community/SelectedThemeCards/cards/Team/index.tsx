@@ -12,7 +12,6 @@ type TeamProps = {
 };
 
 const Team: React.FC<TeamProps> = ({ membersCount, members, moderators, creator }: TeamProps) => {
-    console.log('CREATOR', creator);
     return (
         <>
             <p>Number of members : {membersCount}</p>

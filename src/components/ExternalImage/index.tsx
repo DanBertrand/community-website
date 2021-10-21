@@ -11,7 +11,6 @@ type ExternalImageProps = {
 const ExternalImage = ({ src, alt, ...props }: ExternalImageProps): JSX.Element => {
     const [loaded, setLoaded] = useState(false);
     const onLoad = useCallback(() => {
-        console.log('loaded');
         setLoaded(true);
     }, []);
 

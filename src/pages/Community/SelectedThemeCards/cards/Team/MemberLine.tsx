@@ -11,7 +11,6 @@ type MemberLine = {
 };
 
 const MemberLine: React.FC<MemberLine> = ({ avatar, firstName, lastName, position }: MemberLine) => {
-    console.log('AVATAR', avatar);
     return (
         <LineContainer templateColumns={'10% 40% 40% 10%'} borderRadius={25}>
             <Cell>

@@ -3,6 +3,7 @@ import { CommunityType } from 'store/types';
 import styled from 'styled-components';
 import { useTypedSelector } from 'hooks/useTypedSelector';
 import { useFetch, WorkshopType } from 'hooks/useFetch';
+import { useTranslation } from 'react-i18next';
 
 type WorkshopProps = {
     community: CommunityType;
@@ -10,6 +11,7 @@ type WorkshopProps = {
 };
 
 const Workshop: React.FC<WorkshopProps> = ({ community }: WorkshopProps) => {
+    const { t } = useTranslation('form');
     const { user } = useTypedSelector((state) => state.authentication);
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
@@ -20,7 +22,7 @@ const Workshop: React.FC<WorkshopProps> = ({ community }: WorkshopProps) => {
 
     const handleSubmit = async (e: React.FormEvent<EventTarget>) => {
         e.preventDefault();
-        await post(`/communities/${community.id}/workshops`, { workshop: { title, description } });
+        post(`/communities/${community.id}/workshops`, { workshop: { title, description } });
         setReload((prevReload) => prevReload + 1);
         setCreate(false);
     };
@@ -29,7 +31,6 @@ const Workshop: React.FC<WorkshopProps> = ({ community }: WorkshopProps) => {
         if (user) {
             await patch(`/communities/${community.id}/workshops/${id}`, { workshop: { user_id: user.id } });
             setReload((prevReload) => prevReload + 1);
-            console.log(id);
             setCreate(false);
         }
     };
@@ -43,20 +44,17 @@ const Workshop: React.FC<WorkshopProps> = ({ community }: WorkshopProps) => {
         get(`/communities/${community.id}/workshops`);
     }, [reload]);
 
-    console.log('workshops', workshops);
-    console.log('reload', reload);
-
     return (
         <>
             <input type="button" onClick={() => setCreate(true)} value="+" />{' '}
             {create && (
                 <form id="createWorkshop" onSubmit={handleSubmit}>
                     <label htmlFor="title">
-                        Title
+                        {t('title')}
                         <input value={title} onChange={(e) => setTitle(e.target.value)} name="title" type="text" />
                     </label>
                     <label htmlFor="description">
-                        Description
+                        {t('description')}
                         <textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
@@ -64,7 +62,7 @@ const Workshop: React.FC<WorkshopProps> = ({ community }: WorkshopProps) => {
                             form="createWorkshop"
                         />
                     </label>
-                    <button type="submit">Create</button>
+                    <button type="submit"> {t('create')}</button>
                 </form>
             )}
             {workshops &&

@@ -4,6 +4,7 @@ import { headers } from '../helpers/api';
 import { useActions } from 'hooks';
 import { useHistory } from 'react-router-dom';
 import { UserType } from 'store/types';
+import useURL from './useURL';
 
 interface State<T> {
     data?: T;
@@ -87,6 +88,7 @@ type Action<T> =
     | { type: 'loading' }
     | { type: 'got'; payload: T }
     | { type: 'posted' }
+    | { type: 'put' }
     | { type: 'patched' }
     | { type: 'deleted' }
     | { type: 'error'; payload: Error | unknown }
@@ -95,11 +97,7 @@ type Action<T> =
 export function useFetch<T = unknown>(): FetchReturn<T> {
     const { displaySuccess, displayError } = useActions();
     const token = Cookies.get('token');
-
-    const API_VERSION_URL = process.env.REACT_APP_API_VERSION_URL;
-    const HOST_URL = process.env.REACT_APP_HOST_URL;
-    const API_URL = `${HOST_URL}${API_VERSION_URL}`;
-
+    const { HOST_URL, API_URL } = useURL();
     const history = useHistory();
 
     const initialState: State<T> = {
@@ -116,6 +114,7 @@ export function useFetch<T = unknown>(): FetchReturn<T> {
             case 'got':
                 return { ...state, data: action.payload, isLoading: false };
             case 'posted':
+            case 'put':
             case 'patched':
             case 'deleted':
                 return { ...state, isLoading: false };
@@ -138,13 +137,14 @@ export function useFetch<T = unknown>(): FetchReturn<T> {
                 headers: headers(token),
             });
             const responseData = await response.json();
-            const { message } = responseData;
+            const { error } = responseData;
             if (!response.ok) {
+                displayError(error);
                 throw new Error(response.statusText);
             }
             dispatch({ type: 'got', payload: responseData.data as T });
-            dispatch({ type: 'message', payload: message });
         } catch (error) {
+            dispatch({ type: 'error', payload: error });
             dispatch({ type: 'error', payload: error as Error });
         }
     };
@@ -155,37 +155,34 @@ export function useFetch<T = unknown>(): FetchReturn<T> {
         callback?: CallBack,
     ) => {
         dispatch({ type: 'loading' });
-        console.log('body', body);
         try {
             const response = await fetch(API_URL + query, {
                 method: 'POST',
                 headers: headers(token),
                 body: JSON.stringify(body),
             });
+            const responseData = await response.json();
+            const { message, error } = responseData;
             if (!response.ok) {
+                displayError(error);
                 throw new Error(response.statusText);
             }
-            console.log(response);
-            const responseData = await response.json();
-            console.log(responseData);
-            const { message } = responseData;
             dispatch({ type: 'posted' });
             displaySuccess(message);
             if (callback) {
-                console.log('Call BAck');
-                await callback();
+                callback();
             }
             if (query === '/communities') {
                 history.push(query + `/${responseData.data.id}`);
             }
         } catch (error) {
+            dispatch({ type: 'error', payload: error });
             displayError(`An error has occurred ${error}`);
         }
     };
 
     const postAvatar = async (query: string, body: FormData) => {
         dispatch({ type: 'loading' });
-        console.log('body', body);
         try {
             const response = await fetch(API_URL + query, {
                 method: 'POST',
@@ -195,16 +192,16 @@ export function useFetch<T = unknown>(): FetchReturn<T> {
                 },
                 body: body,
             });
+            const responseData = await response.json();
+            const { message, error } = responseData;
             if (!response.ok) {
+                displayError(error);
                 throw new Error(response.statusText);
             }
-            console.log(response);
-            const responseData = await response.json();
-            console.log(responseData);
-            const { message } = responseData;
             dispatch({ type: 'posted' });
             displaySuccess(message);
         } catch (error) {
+            dispatch({ type: 'error', payload: error });
             displayError(`An error has occurred ${error}`);
         }
     };
@@ -218,15 +215,18 @@ export function useFetch<T = unknown>(): FetchReturn<T> {
                 body: JSON.stringify(body),
             });
             const responseData = await response.json();
+            const { message, error } = responseData;
             if (!response.ok) {
-                throw responseData;
+                displayError(error);
+                throw new Error(response.statusText);
             }
-
             if (callback) {
                 callback();
             }
-            return responseData;
+            dispatch({ type: 'put' });
+            displaySuccess(message);
         } catch (error) {
+            dispatch({ type: 'error', payload: error });
             displayError(`An error has occurred ${error}`);
         }
     };
@@ -239,17 +239,19 @@ export function useFetch<T = unknown>(): FetchReturn<T> {
                 headers: headers(token),
                 body: JSON.stringify(body),
             });
+            const responseData = await response.json();
+            const { message, error } = responseData;
             if (!response.ok) {
+                displayError(error);
                 throw new Error(response.statusText);
             }
-            const responseData = await response.json();
-            const { message } = responseData;
             dispatch({ type: 'patched' });
             displaySuccess(message);
             if (callback) {
                 callback();
             }
         } catch (error) {
+            dispatch({ type: 'error', payload: error });
             displayError(`An error has occurred ${error}`);
         }
     };
@@ -263,17 +265,19 @@ export function useFetch<T = unknown>(): FetchReturn<T> {
                 headers: headers(token),
                 body: JSON.stringify(body),
             });
+            const responseData = await response.json();
+            const { message, error } = responseData;
             if (!response.ok) {
+                displayError(error);
                 throw new Error(response.statusText);
             }
-            const responseData = await response.json();
-            const { message } = responseData;
             if (callback) {
                 callback();
             }
             dispatch({ type: 'deleted' });
             displaySuccess(message);
         } catch (error) {
+            dispatch({ type: 'error', payload: error });
             displayError(`An error has occurred ${error}`);
         }
     };
@@ -291,6 +295,7 @@ export function useFetch<T = unknown>(): FetchReturn<T> {
             } else {
                 dispatch({ type: 'got', payload: responseData.data as T });
                 dispatch({ type: 'message', payload: message });
+                displaySuccess(message);
                 if (callback) {
                     callback();
                 }
@@ -318,6 +323,7 @@ export function useFetch<T = unknown>(): FetchReturn<T> {
                 }
             }
         } catch (error) {
+            dispatch({ type: 'error', payload: error });
             dispatch({ type: 'error', payload: error });
         }
     };

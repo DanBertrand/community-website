@@ -75,7 +75,7 @@ export const Column = styled.div`
 `;
 
 export const MessageContainer = styled.div`
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 10;

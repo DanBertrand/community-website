@@ -30,21 +30,17 @@ export const getLocation = async ({
             state && `&state=${state}`
         }&country=${country}&apiKey=${geoapifyApiKey}`,
     );
-    console.log('Resp', resp);
+
     const localisation = await resp.json();
 
     if (localisation.features.length > 0) {
-        console.log('localisation OK', localisation);
-
         const location: Location = {
             longitude: localisation.features[0].geometry.coordinates[0],
             latitude: localisation.features[0].geometry.coordinates[1],
             formatted_address: localisation.features[0].properties.formatted,
         };
-
         return location;
     } else {
-        console.log('localisation PAS OK', localisation);
         return {
             longitude: '',
             latitude: '',

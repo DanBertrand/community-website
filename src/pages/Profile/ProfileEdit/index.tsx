@@ -37,7 +37,6 @@ const ProfileEdit: React.FC<ProfileEditProps> = ({ user }: ProfileEditProps) => 
         const { name, value } = target;
         const files = target.files;
         if (name === 'avatar' && files) {
-            console.log('File ', files[0]);
             setFile(files[0]);
             setPreviewFile(URL.createObjectURL(files[0]));
         } else {
@@ -63,7 +62,6 @@ const ProfileEdit: React.FC<ProfileEditProps> = ({ user }: ProfileEditProps) => 
                 const formData = new FormData();
                 formData.append('image', file);
                 formData.append('password', input.password);
-                console.log('formData', formData);
                 await postAvatar('/user/avatars', formData);
             }
             const body = {

@@ -10,9 +10,6 @@ export type MapProps = {
 
 const Map: React.FC<MapProps> = ({ lat, lng }: MapProps) => {
     const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
-
-    console.log('lat', 'lng', lat, lng);
-
     return (
         <div style={{ height: '100vh', width: '90%' }}>
             <GoogleMapReact

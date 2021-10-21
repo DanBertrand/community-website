@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { Formik, Field, Form } from 'formik';
 import { useActions } from 'hooks';
-import { useTypedSelector } from 'hooks';
+import { useTranslation } from 'react-i18next';
 
 type Values = {
     email: string;
@@ -10,9 +10,9 @@ type Values = {
 };
 
 const Register: React.FC = () => {
+    const { t } = useTranslation('form');
     const [showPassword, setShowPassword] = useState(false);
     const { signup } = useActions();
-    const { errorMessage } = useTypedSelector((state) => state.authentication);
 
     const register = async ({ email, password }: Values) => {
         signup({ email, password });
@@ -25,8 +25,6 @@ const Register: React.FC = () => {
 
     return (
         <div>
-            <h1>This is register</h1>
-            <h2>ERRORS :{errorMessage}</h2>
             <Formik
                 initialValues={{
                     email: '',
@@ -39,10 +37,10 @@ const Register: React.FC = () => {
             >
                 {({ errors, touched }) => (
                     <Form>
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="email">{t('email')}</label>
                         <Field name="email" type="email" autoComplete="email" />
                         {errors.email && touched.email ? <div>{errors.email}</div> : null}
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">{t('password')}</label>
                         <Field
                             type={showPassword ? 'text' : 'password'}
                             name="password"
@@ -57,9 +55,9 @@ const Register: React.FC = () => {
                                 checked={showPassword}
                                 name="toggle"
                             />
-                            Show password
+                            {t('show_password')}
                         </label>
-                        <button type="submit">Submit</button>
+                        <button type="submit">{t('submit')}</button>
                     </Form>
                 )}
             </Formik>

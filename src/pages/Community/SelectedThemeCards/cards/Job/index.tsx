@@ -3,6 +3,7 @@ import { useFetch } from 'hooks';
 import { CommunityType } from 'store/types';
 import JobLine from './JobLine';
 import { JobType } from 'hooks/useFetch';
+import { useTranslation } from 'react-i18next';
 
 type JobProps = {
     community: CommunityType;
@@ -10,6 +11,7 @@ type JobProps = {
 };
 
 const Job: React.FC<JobProps> = ({ community }: JobProps) => {
+    const { t } = useTranslation('navbar');
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [duration, setDuration] = React.useState<number>(0);
@@ -21,8 +23,7 @@ const Job: React.FC<JobProps> = ({ community }: JobProps) => {
 
     const handleSubmit = async (e: React.FormEvent<EventTarget>) => {
         e.preventDefault();
-
-        await post(`/communities/${community.id}/jobs`, {
+        post(`/communities/${community.id}/jobs`, {
             job: { title, description, nbr_of_person_required: nbrOfPerson, duration_in_days: duration },
         });
         setReload((prevReload) => prevReload + 1);
@@ -44,11 +45,11 @@ const Job: React.FC<JobProps> = ({ community }: JobProps) => {
             {create && (
                 <form id="createJob" onSubmit={handleSubmit}>
                     <label htmlFor="title">
-                        Title
+                        {t('title')}
                         <input value={title} onChange={(e) => setTitle(e.target.value)} name="title" type="text" />
                     </label>
                     <label htmlFor="title">
-                        Duration in days
+                        {t('duration_in_days')}
                         <input
                             value={duration}
                             onChange={(e) => setDuration(parseInt(e.target.value))}
@@ -57,7 +58,7 @@ const Job: React.FC<JobProps> = ({ community }: JobProps) => {
                         />
                     </label>
                     <label htmlFor="title">
-                        Number of person needed
+                        {t('number_of_persons')}
                         <input
                             value={nbrOfPerson}
                             onChange={(e) => setNbrOfPerson(parseInt(e.target.value))}
@@ -66,7 +67,7 @@ const Job: React.FC<JobProps> = ({ community }: JobProps) => {
                         />
                     </label>
                     <label htmlFor="description">
-                        Description
+                        {t('description')}
                         <textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
@@ -74,7 +75,7 @@ const Job: React.FC<JobProps> = ({ community }: JobProps) => {
                             form="createJob"
                         />
                     </label>
-                    <button type="submit">Create</button>
+                    <button type="submit"> {t('create')}</button>
                 </form>
             )}
             {jobs && (

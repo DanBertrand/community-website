@@ -24,8 +24,6 @@ const SelectedThemeCard: React.FC<SelectedThemeCardProps> = ({
     toggleEditingMode,
     canEdit,
 }: SelectedThemeCardProps) => {
-    console.log('community', community);
-
     return (
         <MainCard>
             {canEdit && <EditIcon onClick={toggleEditingMode} active={editingMode} marginTop={5} marginRight={5} />}

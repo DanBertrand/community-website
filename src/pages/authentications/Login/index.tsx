@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Formik, Field, Form } from 'formik';
 import { useActions } from 'hooks';
+import { useTranslation } from 'react-i18next';
 
 type Values = {
     email: string;
@@ -10,6 +11,7 @@ type Values = {
 const Login: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const { login } = useActions();
+    const { t } = useTranslation('form');
 
     return (
         <Formik
@@ -22,11 +24,11 @@ const Login: React.FC = () => {
             }}
         >
             {({ errors, touched }) => (
-                <Form style={{ paddingTop: 200 }}>
-                    <label htmlFor="email">Email</label>
+                <Form>
+                    <label htmlFor="email">{t('email')}</label>
                     <Field name="email" type="email" autoComplete="email" />
                     {errors.email && touched.email ? <div>{errors.email}</div> : null}
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">{t('password')}</label>
                     <Field
                         type={showPassword ? 'text' : 'password'}
                         name="password"
@@ -41,9 +43,9 @@ const Login: React.FC = () => {
                             checked={showPassword}
                             name="toggle"
                         />
-                        Show password
+                        {t('show_password')}
                     </label>
-                    <button type="submit">Submit</button>
+                    <button type="submit">{t('submit')}</button>
                 </Form>
             )}
         </Formik>

@@ -3,10 +3,7 @@ import { CommunitiesActionType } from '../types';
 import { CommunitiesAction } from '../actions';
 import { headers } from '../../helpers/api';
 import Cookies from 'js-cookie';
-
-const API_VERSION_URL = process.env.REACT_APP_API_VERSION_URL;
-const HOST_URL = process.env.REACT_APP_HOST_URL;
-const API_URL = `${HOST_URL}${API_VERSION_URL}`;
+import { get } from '../../helpers/api';
 
 export const loadCommunities = () => {
     return async (dispatch: Dispatch<CommunitiesAction>): Promise<void> => {
@@ -15,7 +12,7 @@ export const loadCommunities = () => {
         });
         try {
             const token = Cookies.get('token');
-            const response = await fetch(`${API_URL}/user/communities`, {
+            const response = await fetch(`${get('API_URL')}/user/communities`, {
                 method: 'GET',
                 headers: headers(token),
             });
@@ -23,7 +20,6 @@ export const loadCommunities = () => {
             if (!response.ok) {
                 throw new Error(error);
             }
-            console.log('DATA LOAD COMMUITIES', data);
             dispatch({
                 type: CommunitiesActionType.LOAD_COMMUNITIES_SUCCESS,
                 payload: data,
