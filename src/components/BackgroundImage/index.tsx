@@ -17,13 +17,11 @@ const BackgroundImage = ({ src, onLoadFinish }: BackgroundImageProps): JSX.Eleme
     }, [loaded]);
 
     const onLoad = useCallback(() => {
-        console.log('loaded FROM USECALLBACK');
         setTimeout(() => {
             setLoaded(true);
         }, 1000);
     }, []);
 
-    console.log(loaded);
     return (
         //
         <>

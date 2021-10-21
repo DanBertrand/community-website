@@ -14,7 +14,7 @@ export const displaySuccess = (message: string) => {
 export const displayError = (message: string) => {
     return async (dispatch: Dispatch<MessagesAction>): Promise<void> => {
         dispatch({
-            type: MessagesActionType.DISPLAY_SUCCESS_MESSAGE,
+            type: MessagesActionType.DISPLAY_ERROR_MESSAGE,
             payload: message,
         });
     };

@@ -3,10 +3,7 @@ import { AuthActionType, MessagesActionType, UserParamsType } from '../types';
 import { AuthAction, MessagesAction } from '../actions';
 import { headers } from '../../helpers/api';
 import { Dispatch } from 'redux';
-
-const API_VERSION_URL = process.env.REACT_APP_API_VERSION_URL;
-const HOST_URL = process.env.REACT_APP_HOST_URL;
-const API_URL = `${HOST_URL}${API_VERSION_URL}`;
+import { get } from '../../helpers/api';
 
 export const signup = (signupParams: UserParamsType) => {
     return async (dispatch: Dispatch<AuthAction | MessagesAction>): Promise<void> => {
@@ -15,7 +12,7 @@ export const signup = (signupParams: UserParamsType) => {
             type: AuthActionType.SIGNUP_ATTEMPT,
         });
         try {
-            const response = await fetch(`${API_URL}/signup`, {
+            const response = await fetch(`${get('API_URL')}/signup`, {
                 method: 'POST',
                 headers: headers(),
                 body: JSON.stringify({
@@ -58,7 +55,7 @@ export const login = (loginParams: UserParamsType) => {
             type: AuthActionType.LOGIN_ATTEMPT,
         });
         try {
-            const response = await fetch(`${API_URL}/login`, {
+            const response = await fetch(`${get('API_URL')}/login`, {
                 method: 'POST',
                 headers: headers(),
                 body: JSON.stringify({
@@ -96,7 +93,7 @@ export const login = (loginParams: UserParamsType) => {
 export const logout = () => {
     return async (dispatch: Dispatch<AuthAction | MessagesAction>): Promise<void> => {
         const token = Cookies.get('token');
-        const response = await fetch(`${API_URL}/logout`, {
+        const response = await fetch(`${get('API_URL')}/logout`, {
             method: 'DELETE',
             headers: headers(token),
         });
@@ -120,7 +117,7 @@ export const autoLogin = () => {
         try {
             const token = Cookies.get('token');
             if (!token) return;
-            const response = await fetch(`${API_URL}/login`, {
+            const response = await fetch(`${get('API_URL')}/login`, {
                 method: 'POST',
                 headers: headers(token),
             });
@@ -131,7 +128,8 @@ export const autoLogin = () => {
                     type: AuthActionType.LOGIN_ERROR,
                     payload: message,
                 });
-            } else {
+            }
+            if (response.ok) {
                 dispatch({
                     type: AuthActionType.LOGIN_SUCCESS,
                     payload: data,
@@ -149,7 +147,7 @@ export const loadUser = () => {
         try {
             const token = Cookies.get('token');
             if (!token) return;
-            const response = await fetch(`${API_URL}/profile`, {
+            const response = await fetch(`${get('API_URL')}/profile`, {
                 method: 'GET',
                 headers: headers(token),
             });

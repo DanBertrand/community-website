@@ -6,6 +6,7 @@ import { useActions } from 'hooks';
 import { AddressInputs, getLocation } from 'helpers/location';
 import Loading from 'components/Loading';
 import { CommunityType } from 'store/types';
+import { useTranslation } from 'react-i18next';
 
 export type CommunityCreationInputs = AddressInputs & {
     name: string;
@@ -13,6 +14,7 @@ export type CommunityCreationInputs = AddressInputs & {
 };
 
 const CreateCommunity: React.FC = () => {
+    const { t } = useTranslation('form');
     const { loadCommunities } = useActions();
     const { state, post } = useFetch<CommunityType>();
     const { isLoading } = state;
@@ -39,7 +41,6 @@ const CreateCommunity: React.FC = () => {
         country,
     }: CommunityCreationInputs) => {
         const location = await getLocation({ houseNumber, street, postCode, city, state, country });
-        console.log('Location', location);
         post(
             '/communities',
             {
@@ -88,35 +89,35 @@ const CreateCommunity: React.FC = () => {
                             marginRight: '5%',
                         }}
                     >
-                        <label htmlFor="name">Name</label>
+                        <label htmlFor="name">{t('name')}</label>
                         <Field name="name" type="name" autoComplete="name" />
                         {errors.name && touched.name ? <div>{errors.name}</div> : null}
 
-                        <label htmlFor="houseNumber">House Number</label>
+                        <label htmlFor="houseNumber">{t('house_number')}</label>
                         <Field name="houseNumber" autoComplete="houseNumber" className="form-control rounded-0" />
                         {errors.houseNumber && touched.houseNumber ? <div>{errors.houseNumber}</div> : null}
 
-                        <label htmlFor="street">Street</label>
+                        <label htmlFor="street">{t('street')}</label>
                         <Field name="street" autoComplete="street" className="form-control rounded-0" />
                         {errors.street && touched.street ? <div>{errors.street}</div> : null}
 
-                        <label htmlFor="postCode">Post Code</label>
+                        <label htmlFor="postCode">{t('post_code')}</label>
                         <Field name="postCode" autoComplete="postCode" className="form-control rounded-0" />
                         {errors.postCode && touched.postCode ? <div>{errors.postCode}</div> : null}
 
-                        <label htmlFor="city">City</label>
+                        <label htmlFor="city">{t('city')}</label>
                         <Field name="city" autoComplete="city" className="form-control rounded-0" />
                         {errors.city && touched.city ? <div>{errors.city}</div> : null}
 
-                        <label htmlFor="state">State</label>
+                        <label htmlFor="state">{t('state')}</label>
                         <Field name="state" autoComplete="state" className="form-control rounded-0" />
                         {errors.state && touched.state ? <div>{errors.state}</div> : null}
 
-                        <label htmlFor="country">Country</label>
+                        <label htmlFor="country">{t('country')}</label>
                         <Field name="country" autoComplete="country" className="form-control rounded-0" />
                         {errors.country && touched.country ? <div>{errors.country}</div> : null}
 
-                        <label htmlFor="description">description</label>
+                        <label htmlFor="description">{t('description')}</label>
                         <Field
                             type="text"
                             name="description"
@@ -125,7 +126,7 @@ const CreateCommunity: React.FC = () => {
                         />
                         {errors.description && touched.description ? <div>{errors.description}</div> : null}
 
-                        <button type="submit">Submit</button>
+                        <button type="submit">{t('submit')}</button>
                     </Form>
                 )}
             </Formik>

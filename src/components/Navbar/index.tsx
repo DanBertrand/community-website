@@ -2,10 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { useActions } from 'hooks/useActions';
+import { useTranslation } from 'react-i18next';
 import { Dropdown, Option } from '../Dropdown';
 import { UserType } from 'store/types';
 import StyledLink from '../StyledLink';
 import { UserCommunity } from 'store/types/communitiesTypes';
+import LanguageSelector from 'components/LanguageSelector';
 // import { GiHamburgerMenu } from 'react-icons/gi';
 
 type NavbarProps = {
@@ -19,6 +21,7 @@ type NavbarProps = {
 const Navbar: React.FC<NavbarProps> = ({ user, communities }: NavbarProps) => {
     const [scrollPosition, setScrollPosition] = React.useState(0);
     const { logout, cleanCommunities } = useActions();
+    const { t, i18n } = useTranslation('navbar');
 
     const history = useHistory();
 
@@ -46,18 +49,18 @@ const Navbar: React.FC<NavbarProps> = ({ user, communities }: NavbarProps) => {
     const currentPath = history.location.pathname;
     const currentPathID = parseInt(currentPath.replace(/\D+/g, ''));
 
-    console.log('NAVBAR');
+    console.log('NAVBAR i18n', i18n);
     console.log('communities?.data && communities?.data.length > 0', communities?.data && communities?.data.length > 0);
 
     return (
         <Container scrollPosition={scrollPosition}>
-            <StyledLink to="/">Home</StyledLink>
+            <StyledLink to="/">{t('home')}</StyledLink>
             {user ? (
                 <>
                     <span>Logged as:{user.email} </span>
-                    <StyledLink to="/my_account">My Account</StyledLink>
+                    <StyledLink to="/my_account">{t('my_account')}</StyledLink>
                     <StyledLink onClick={handleLogout} to="/">
-                        Logout
+                        {t('logout')}
                     </StyledLink>
 
                     {communities?.data && communities?.data.length > 0 && (
@@ -72,14 +75,15 @@ const Navbar: React.FC<NavbarProps> = ({ user, communities }: NavbarProps) => {
                             ))}
                         </Dropdown>
                     )}
-                    <StyledLink to="/new_community">Create Community</StyledLink>
+                    <StyledLink to="/new_community">{t('create_community')}</StyledLink>
                 </>
             ) : (
                 <>
-                    <StyledLink to="/login">Login</StyledLink>
-                    <StyledLink to="/register">Register</StyledLink>
+                    <StyledLink to="/login">{t('login')}</StyledLink>
+                    <StyledLink to="/register">{t('register')}</StyledLink>
                 </>
             )}
+            <LanguageSelector />
         </Container>
     );
 };

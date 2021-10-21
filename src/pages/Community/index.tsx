@@ -10,11 +10,12 @@ import { ContentContainer } from 'styles';
 import Loading from 'components/Loading';
 import { useFetch } from 'hooks';
 import { CommunityType } from 'store/types';
+import { useTranslation } from 'react-i18next';
 
 type CommunityProps = RouteComponentProps<RouteParams> & PublicRouteProps;
 
 const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
-    // const { loadCommunities } = useActions();
+    const { t } = useTranslation('form');
     const { state, get } = useFetch<CommunityType>();
     const { data: community, isLoading } = state;
     const { communities } = useTypedSelector((state) => state.communities);
@@ -22,16 +23,12 @@ const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
     const [selectedThemeCard, setSelectedThemeCard] = React.useState('');
     const [editingMode, setEditingMode] = React.useState(false);
     const role = userInfos?.role ? userInfos.role : '';
-    // const memberId = userInfos?.member_id ? userInfos.member_id : null;
-    // const [isModalOpen, setIsModalOpen] = React.useState(false);
 
     const [cardsTitle, setCardsTitle] = React.useState<string[]>([]);
 
     const generateCardsTitle = () => {
         let cardsList = ['Location', 'Team'];
-        console.log('role', role);
         if (role === 'creator') {
-            console.log('CREATOR');
             cardsList = [...cardsList, 'Workshop', 'Job'];
         } else if (community) {
             if (community.has_workshops) {
@@ -43,16 +40,6 @@ const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
         }
         setCardsTitle(cardsList);
     };
-
-    // const warning = role ? 'Leave the community ?' : 'Join the community ?';
-
-    // const toggleSubscription = async () => {
-    //     if (user && !memberId) {
-    //         await post(`/communities/${match.params.id}/members`, body, loadCommunities);
-    //     } else {
-    //         await remove(`/communities/${match.params.id}/members/${memberId}`, { url: 'none' }, loadCommunities);
-    //     }
-    // };
 
     React.useEffect(() => {
         get(`/communities/${match.params.id}`);
@@ -76,8 +63,6 @@ const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
     const toggleEditingMode = () => {
         setEditingMode(!editingMode);
     };
-
-    console.log('Community', community);
 
     return (
         <>
