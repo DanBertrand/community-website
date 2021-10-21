@@ -1,0 +1,17 @@
+email: Email
+password: Password
+show_password: Show password
+submit: Submit
+name: Name
+house_number: House Number
+street: Street
+post_code: Post Code
+city: City
+state: State
+country: Country
+description: Description
+
+create: Create
+title: Title
+duration_in_days: Duration in days
+number_of_person: Number of persons

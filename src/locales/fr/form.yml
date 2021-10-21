@@ -1,0 +1,17 @@
+email: Email
+password: Mot de passe
+show_password: Montrer mote de passe
+submit: Envoyer
+name: Nom
+house_number: Numéro de rue
+street: Rue
+post_code: Code Postal
+city: Ville
+state: Etat
+country: Pays
+description: Description
+
+create: Créer
+title: Titre
+duration_in_days: Durée en jours
+number_of_person: Nombre de personnes

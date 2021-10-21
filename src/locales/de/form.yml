@@ -1,0 +1,17 @@
+email: Email
+password: Kennwort
+show_password: Kennwort anzeigen
+submit: Einreichen
+name: Name
+house_number: Hausnummer
+street: Straße
+post_code: Postleitzahl
+city: Stadt
+state: Staat
+country: Land
+description: Beschreibung
+
+create: Erstellen
+title: Titel
+duration_in_days: Dauer in Tagen
+number_of_person: Anzahl der Personen
