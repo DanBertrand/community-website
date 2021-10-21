@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 const languages = [
     { id: 1, name: 'English', code: 'en-GB' },
-    { id: 2, name: 'French', code: 'fr-FR' },
+    { id: 2, name: 'Français', code: 'fr-FR' },
     { id: 3, name: 'Deutsch', code: 'de-DE' },
 ];
 
