@@ -10,12 +10,10 @@ import { ContentContainer } from 'styles';
 import Loading from 'components/Loading';
 import { useFetch } from 'hooks';
 import { CommunityType } from 'store/types';
-import { useTranslation } from 'react-i18next';
 
 type CommunityProps = RouteComponentProps<RouteParams> & PublicRouteProps;
 
 const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
-    const { t } = useTranslation('form');
     const { state, get } = useFetch<CommunityType>();
     const { data: community, isLoading } = state;
     const { communities } = useTypedSelector((state) => state.communities);

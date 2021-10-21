@@ -1,9 +1,9 @@
 import React from 'react';
 import Cookies from 'js-cookie';
 import { useTranslation } from 'react-i18next';
-import flagFR from 'assets/images/flags/fr.svg';
-import flagDE from 'assets/images/flags/de.svg';
-import flagGB from 'assets/images/flags/gb.svg';
+// import flagFR from 'assets/images/flags/fr.svg';
+// import flagDE from 'assets/images/flags/de.svg';
+// import flagGB from 'assets/images/flags/gb.svg';
 
 const languages = [
     { id: 1, name: 'English', code: 'en-GB' },
