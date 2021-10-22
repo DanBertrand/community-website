@@ -2,3 +2,5 @@ location: Location
 team: Team
 workshop: Workshop
 job: Job
+product: Product
+project: Project

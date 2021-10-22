@@ -24,8 +24,7 @@ export type CommunityType = {
     member_id: number;
     creator: UserType;
     members_count: number;
-    moderators: Member[];
-    members: Member[];
+    is_admin: boolean;
     name: string;
     description: string;
     address: AddressType;

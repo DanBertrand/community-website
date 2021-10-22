@@ -8,9 +8,10 @@ const Location = React.lazy(() => import('./cards/Location'));
 // const Project = React.lazy(() => import('./type/Project'));
 const Workshop = React.lazy(() => import('./cards/Workshop'));
 import EditIcon from 'components/EditIcon';
+import { Card } from '..';
 
 type SelectedThemeCardProps = {
-    title: string;
+    card: Card;
     community: CommunityType;
     editingMode: boolean;
     canEdit: boolean;
@@ -18,12 +19,13 @@ type SelectedThemeCardProps = {
 };
 
 const SelectedThemeCard: React.FC<SelectedThemeCardProps> = ({
-    title,
+    card,
     community,
     editingMode,
     toggleEditingMode,
     canEdit,
 }: SelectedThemeCardProps) => {
+    const { id, title } = card;
     return (
         <MainCard>
             {canEdit && <EditIcon onClick={toggleEditingMode} active={editingMode} marginTop={5} marginRight={5} />}
@@ -41,27 +43,25 @@ const SelectedThemeCard: React.FC<SelectedThemeCardProps> = ({
                 }
             >
                 {(() => {
-                    switch (title) {
-                        case 'Location':
+                    switch (id) {
+                        case 1:
                             return <Location address={community.address} editingMode={editingMode} />;
-                        case 'Product':
-                            return <Product community={community} editingMode={editingMode} />;
-                        case 'Team':
+                        case 2:
                             return (
                                 <Team
                                     membersCount={community.members_count}
                                     creator={community.creator}
-                                    moderators={community.moderators}
-                                    members={community.members}
                                     editingMode={editingMode}
                                 />
                             );
-                        case 'Job':
-                            return <Job community={community} editingMode={editingMode} />;
-                        // case 'Project':
-                        //     return <Project community={community} />;
-                        case 'Workshop':
+                        case 3:
                             return <Workshop editingMode={editingMode} community={community} />;
+                        case 4:
+                            return <Job community={community} editingMode={editingMode} />;
+                        case 5:
+                            return <Product community={community} editingMode={editingMode} />;
+                        // case 6:
+                        //     return <Project community={community} />;
                     }
                 })()}
             </Suspense>

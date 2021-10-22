@@ -6,17 +6,20 @@ import { RiTeamLine } from 'react-icons/ri';
 import { GiCrosscutSaw } from 'react-icons/gi';
 import { GiStrong } from 'react-icons/gi';
 import EditIcon from 'components/EditIcon';
+import { Card } from '..';
 
 type NormalThemeCardProps = {
     title: string;
+    id: number;
     canEdit: boolean;
-    selectedThemeCard: string;
-    handleSelect: (title: string, editing: boolean) => void;
+    selectedThemeCard?: Card;
+    handleSelect: (id: number, editing: boolean) => void;
     editingMode: boolean;
 };
 
 const NormalThemeCard = ({
     title,
+    id,
     handleSelect,
     canEdit,
     selectedThemeCard,
@@ -33,21 +36,24 @@ const NormalThemeCard = ({
         job: <GiStrong size={standardIconSize} />,
     };
 
-    const isSelected = title === selectedThemeCard;
+    const isSelected = id === selectedThemeCard?.id;
+
+    console.log('ID CARD ', id);
+    console.log('TITLE CARD ', title);
 
     return (
         <>
             <StyledNormalThemeCard
                 onClick={(e: React.SyntheticEvent) => {
                     e.stopPropagation();
-                    handleSelect(title, false);
+                    handleSelect(id, false);
                 }}
                 isSelected={isSelected}
             >
                 {canEdit && (
                     <EditIcon
                         active={isSelected && editingMode}
-                        onClick={() => handleSelect(title, true)}
+                        onClick={() => handleSelect(id, true)}
                         marginTop={5}
                         marginRight={5}
                     />
@@ -55,19 +61,19 @@ const NormalThemeCard = ({
                 <Content>
                     <h3>{title}</h3>
                     {(() => {
-                        switch (title) {
-                            case 'Location':
+                        switch (id) {
+                            case 1:
                                 return icon.location;
-                            case 'Product':
-                                return icon.product;
-                            case 'Project':
-                                return icon.project;
-                            case 'Team':
+                            case 2:
                                 return icon.team;
-                            case 'Job':
-                                return icon.job;
-                            case 'Workshop':
+                            case 3:
                                 return icon.workshop;
+                            case 4:
+                                return icon.job;
+                            case 5:
+                                return icon.product;
+                            case 6:
+                                return icon.project;
                         }
                     })()}
                 </Content>
