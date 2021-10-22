@@ -9,6 +9,7 @@ const Location = React.lazy(() => import('./cards/Location'));
 const Workshop = React.lazy(() => import('./cards/Workshop'));
 import EditIcon from 'components/EditIcon';
 import { Card } from '..';
+import { useTranslation } from 'react-i18next';
 
 type SelectedThemeCardProps = {
     card: Card;
@@ -22,15 +23,17 @@ const SelectedThemeCard: React.FC<SelectedThemeCardProps> = ({
     card,
     community,
     editingMode,
-    toggleEditingMode,
     canEdit,
+    toggleEditingMode,
 }: SelectedThemeCardProps) => {
+    const { t } = useTranslation('community');
     const { id, title } = card;
+
     return (
         <MainCard>
             {canEdit && <EditIcon onClick={toggleEditingMode} active={editingMode} marginTop={5} marginRight={5} />}
             <h2 style={{ alignSelf: 'center' }}>
-                {title}
+                {` ${t(title)}`}
                 {editingMode && '(EditMode)'}
             </h2>
 

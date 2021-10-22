@@ -9,7 +9,6 @@ import { ContentContainer } from 'styles';
 import Loading from 'components/Loading';
 import { useFetch } from 'hooks';
 import { CommunityType } from 'store/types';
-import { useTranslation } from 'react-i18next';
 
 type CommunityProps = RouteComponentProps<RouteParams> & PublicRouteProps;
 
@@ -19,7 +18,6 @@ export type Card = {
 };
 
 const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
-    const { t } = useTranslation('community');
     const { state, get } = useFetch<CommunityType>();
     const { data: community, isLoading } = state;
 
@@ -28,12 +26,12 @@ const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
 
     const [cardsList, setCardsList] = React.useState<Card[]>([]);
     const cards = [
-        { id: 1, title: t('location') },
-        { id: 2, title: t('team') },
-        { id: 3, title: t('workshop') },
-        { id: 4, title: t('job') },
-        { id: 5, title: t('product') },
-        { id: 6, title: t('project') },
+        { id: 1, title: 'location' },
+        { id: 2, title: 'team' },
+        { id: 3, title: 'workshop' },
+        { id: 4, title: 'job' },
+        { id: 5, title: 'product' },
+        { id: 6, title: 'project' },
     ];
 
     const generateCardsList = () => {

@@ -7,6 +7,7 @@ import { GiCrosscutSaw } from 'react-icons/gi';
 import { GiStrong } from 'react-icons/gi';
 import EditIcon from 'components/EditIcon';
 import { Card } from '..';
+import { useTranslation } from 'react-i18next';
 
 type NormalThemeCardProps = {
     title: string;
@@ -25,6 +26,7 @@ const NormalThemeCard = ({
     selectedThemeCard,
     editingMode,
 }: NormalThemeCardProps): JSX.Element => {
+    const { t } = useTranslation('community');
     const standardIconSize = 56;
 
     const icon = {
@@ -59,7 +61,7 @@ const NormalThemeCard = ({
                     />
                 )}
                 <Content>
-                    <h3>{title}</h3>
+                    <h3>{t(title)}</h3>
                     {(() => {
                         switch (id) {
                             case 1:
