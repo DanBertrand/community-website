@@ -1,9 +1,9 @@
 import React from 'react';
 import Cookies from 'js-cookie';
-import { useTranslation } from 'react-i18next';
 // import flagFR from 'assets/images/flags/fr.svg';
 // import flagDE from 'assets/images/flags/de.svg';
 // import flagGB from 'assets/images/flags/gb.svg';
+import i18n from '../../i18n/index';
 
 const languages = [
     { id: 1, name: 'English', code: 'en-GB' },
@@ -11,8 +11,7 @@ const languages = [
     { id: 3, name: 'Deutsch', code: 'de-DE' },
 ];
 
-const LanguageSelector = (): JSX.Element => {
-    const { i18n } = useTranslation();
+const LanguageSwitcher = (): JSX.Element => {
     const [value, setValue] = React.useState(
         languages.find((lng) => lng.code === Cookies.get('i18n-language')) || languages[0],
     );
@@ -20,6 +19,7 @@ const LanguageSelector = (): JSX.Element => {
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newLanguage = languages.find((lng) => lng.code === e.target.value);
         if (newLanguage) {
+            // toggleLanguage(newLanguage.code);
             i18n.changeLanguage(newLanguage.code);
             setValue(newLanguage);
         }
@@ -36,4 +36,4 @@ const LanguageSelector = (): JSX.Element => {
     );
 };
 
-export default LanguageSelector;
+export default LanguageSwitcher;

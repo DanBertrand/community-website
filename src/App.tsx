@@ -18,16 +18,15 @@ import EmailConfirmation from 'pages/authentications/EmailConfirmation';
 import Modal from 'components/Modal';
 import FlashMessage from 'components/FlashMessage';
 import { MessageContainer, PageContainer } from 'styles';
+
 const { Suspense, useEffect, useState } = React;
 
-const App: React.FC = () => {
+const App = (): JSX.Element => {
     const { autoLogin, loadCommunities } = useActions();
     const { user } = useTypedSelector((state) => state.authentication);
     const { communities } = useTypedSelector((state) => state.communities);
     const { messages } = useTypedSelector((state) => state.message);
-
     const [counter, setCounter] = useState(1);
-
     const API_VERSION_URL = process.env.REACT_APP_API_VERSION_URL;
     const HOST_URL = process.env.REACT_APP_HOST_URL;
     const API_URL = `${HOST_URL}${API_VERSION_URL}`;

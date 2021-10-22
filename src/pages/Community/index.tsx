@@ -75,7 +75,6 @@ const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
     };
 
     console.log('community', community);
-    console.log('cardsList', cardsList);
 
     return (
         <>

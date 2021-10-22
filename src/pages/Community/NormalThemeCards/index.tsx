@@ -28,7 +28,6 @@ const NormalThemeCard = ({
 }: NormalThemeCardProps): JSX.Element => {
     const { t } = useTranslation('community');
     const standardIconSize = 56;
-
     const icon = {
         location: <GrMapLocation size={standardIconSize} />,
         product: <FaCarrot size={standardIconSize} />,
@@ -39,9 +38,6 @@ const NormalThemeCard = ({
     };
 
     const isSelected = id === selectedThemeCard?.id;
-
-    console.log('ID CARD ', id);
-    console.log('TITLE CARD ', title);
 
     return (
         <>

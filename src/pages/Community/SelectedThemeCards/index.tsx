@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { CommunityType } from 'store/types';
 import { MainCard } from 'styles/index';
-const Product = React.lazy(() => import('./cards/Product/Product'));
+const Product = React.lazy(() => import('./cards/Product'));
 const Job = React.lazy(() => import('./cards/Job'));
 const Team = React.lazy(() => import('./cards/Team'));
 const Location = React.lazy(() => import('./cards/Location'));
@@ -48,21 +48,22 @@ const SelectedThemeCard: React.FC<SelectedThemeCardProps> = ({
                 {(() => {
                     switch (id) {
                         case 1:
-                            return <Location address={community.address} editingMode={editingMode} />;
+                            return <Location canEdit={canEdit} address={community.address} editingMode={editingMode} />;
                         case 2:
                             return (
                                 <Team
+                                    canEdit={canEdit}
                                     membersCount={community.members_count}
                                     creator={community.creator}
                                     editingMode={editingMode}
                                 />
                             );
                         case 3:
-                            return <Workshop editingMode={editingMode} community={community} />;
+                            return <Workshop canEdit={canEdit} editingMode={editingMode} community={community} />;
                         case 4:
-                            return <Job community={community} editingMode={editingMode} />;
+                            return <Job canEdit={canEdit} community={community} editingMode={editingMode} />;
                         case 5:
-                            return <Product community={community} editingMode={editingMode} />;
+                            return <Product canEdit={canEdit} community={community} editingMode={editingMode} />;
                         // case 6:
                         //     return <Project community={community} />;
                     }
