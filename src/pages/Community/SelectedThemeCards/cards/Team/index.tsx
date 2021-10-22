@@ -9,7 +9,7 @@ type TeamProps = {
     // moderators: UserType[];
     // members: UserType[];
     editingMode: boolean;
-    canEdit: boolean;
+    // canEdit: boolean;
 };
 
 const Team = ({ membersCount, creator }: TeamProps): JSX.Element => {

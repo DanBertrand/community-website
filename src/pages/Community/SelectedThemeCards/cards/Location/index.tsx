@@ -5,7 +5,7 @@ import { AddressType } from 'store/types/communitiesTypes';
 type LocationProps = {
     address: AddressType;
     editingMode: boolean;
-    canEdit: boolean;
+    // canEdit: boolean;
 };
 const Location = ({ address }: LocationProps): JSX.Element => {
     const { formatted_address, house_number, street, city, post_code, country, latitude, longitude } = address;
