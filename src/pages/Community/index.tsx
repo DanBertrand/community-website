@@ -19,7 +19,7 @@ export type Card = {
 };
 
 const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
-    const { t } = useTranslation('community');
+    const { t, i18n } = useTranslation('community');
     const { state, get } = useFetch<CommunityType>();
     const { data: community, isLoading } = state;
 
@@ -61,7 +61,7 @@ const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
         if (community) {
             generateCardsList();
         }
-    }, [community]);
+    }, [community, i18n.language]);
 
     const handleSelect = (id: number, editing: boolean) => {
         if (selectedThemeCard?.id === id && editingMode) {
@@ -77,7 +77,6 @@ const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
     };
 
     console.log('community', community);
-    console.log('cardsList', cardsList);
 
     return (
         <>

@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import EmailConfirmation from 'pages/authentications/EmailConfirmation';
 import React from 'react';
 import './i18n';
+
 // import LogRocket from 'logrocket';
 // LogRocket.init('jhe5a4/dan');
 

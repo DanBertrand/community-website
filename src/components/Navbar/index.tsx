@@ -7,7 +7,7 @@ import { Dropdown, Option } from '../Dropdown';
 import { UserType } from 'store/types';
 import StyledLink from '../StyledLink';
 import { UserCommunity } from 'store/types/communitiesTypes';
-import LanguageSelector from 'components/LanguageSelector';
+import LanguageSwitcher from 'components/LanguageSwitcher';
 // import { GiHamburgerMenu } from 'react-icons/gi';
 
 type NavbarProps = {
@@ -21,7 +21,7 @@ type NavbarProps = {
 const Navbar: React.FC<NavbarProps> = ({ user, communities }: NavbarProps) => {
     const [scrollPosition, setScrollPosition] = React.useState(0);
     const { logout, cleanCommunities } = useActions();
-    const { t, i18n } = useTranslation('navbar');
+    const { t } = useTranslation('navbar');
 
     const history = useHistory();
 
@@ -48,8 +48,6 @@ const Navbar: React.FC<NavbarProps> = ({ user, communities }: NavbarProps) => {
 
     const currentPath = history.location.pathname;
     const currentPathID = parseInt(currentPath.replace(/\D+/g, ''));
-
-    console.log('NAVBAR i18n', i18n);
 
     return (
         <Container scrollPosition={scrollPosition}>
@@ -82,7 +80,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, communities }: NavbarProps) => {
                     <StyledLink to="/register">{t('register')}</StyledLink>
                 </>
             )}
-            <LanguageSelector />
+            <LanguageSwitcher />
         </Container>
     );
 };

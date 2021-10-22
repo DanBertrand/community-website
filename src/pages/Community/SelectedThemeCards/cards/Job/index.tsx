@@ -8,9 +8,10 @@ import { useTranslation } from 'react-i18next';
 type JobProps = {
     community: CommunityType;
     editingMode: boolean;
+    canEdit: boolean;
 };
 
-const Job: React.FC<JobProps> = ({ community }: JobProps) => {
+const Job: React.FC<JobProps> = ({ community, canEdit }: JobProps) => {
     const { t } = useTranslation('navbar');
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
@@ -41,7 +42,7 @@ const Job: React.FC<JobProps> = ({ community }: JobProps) => {
 
     return (
         <>
-            <input type="button" onClick={() => setCreate(true)} value="+" />{' '}
+            {canEdit && <input type="button" onClick={() => setCreate(true)} value="+" />}
             {create && (
                 <form id="createJob" onSubmit={handleSubmit}>
                     <label htmlFor="title">
