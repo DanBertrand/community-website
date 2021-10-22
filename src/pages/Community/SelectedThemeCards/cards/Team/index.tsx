@@ -9,9 +9,10 @@ type TeamProps = {
     // moderators: UserType[];
     // members: UserType[];
     editingMode: boolean;
+    canEdit: boolean;
 };
 
-const Team: React.FC<TeamProps> = ({ membersCount, creator }: TeamProps) => {
+const Team = ({ membersCount, creator }: TeamProps): JSX.Element => {
     return (
         <>
             <p>Number of members : {membersCount}</p>

@@ -4,10 +4,11 @@ import { CommunityType } from 'store/types';
 type ProductProps = {
     community: CommunityType;
     editingMode: boolean;
+    canEdit: boolean;
 };
 
-const Product: React.FC<ProductProps> = () => {
-    return <div></div>;
+const Project = (): JSX.Element => {
+    return <div>Project</div>;
 };
 
-export default Product;
+export default Project;

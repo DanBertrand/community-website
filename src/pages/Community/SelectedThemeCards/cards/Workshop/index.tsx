@@ -8,9 +8,10 @@ import { useTranslation } from 'react-i18next';
 type WorkshopProps = {
     community: CommunityType;
     editingMode: boolean;
+    canEdit: boolean;
 };
 
-const Workshop: React.FC<WorkshopProps> = ({ community }: WorkshopProps) => {
+const Workshop = ({ community, canEdit }: WorkshopProps): JSX.Element => {
     const { t } = useTranslation('form');
     const { user } = useTypedSelector((state) => state.authentication);
     const [title, setTitle] = React.useState('');
@@ -46,7 +47,7 @@ const Workshop: React.FC<WorkshopProps> = ({ community }: WorkshopProps) => {
 
     return (
         <>
-            <input type="button" onClick={() => setCreate(true)} value="+" />{' '}
+            {canEdit && <input type="button" onClick={() => setCreate(true)} value="+" />}
             {create && (
                 <form id="createWorkshop" onSubmit={handleSubmit}>
                     <label htmlFor="title">
