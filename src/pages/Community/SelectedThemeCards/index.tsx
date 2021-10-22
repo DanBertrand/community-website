@@ -48,18 +48,17 @@ const SelectedThemeCard: React.FC<SelectedThemeCardProps> = ({
                 {(() => {
                     switch (id) {
                         case 1:
-                            return <Location canEdit={canEdit} address={community.address} editingMode={editingMode} />;
+                            return <Location address={community.address} editingMode={editingMode} />;
                         case 2:
                             return (
                                 <Team
-                                    canEdit={canEdit}
                                     membersCount={community.members_count}
                                     creator={community.creator}
                                     editingMode={editingMode}
                                 />
                             );
                         case 3:
-                            return <Workshop canEdit={canEdit} editingMode={editingMode} community={community} />;
+                            return <Workshop editingMode={editingMode} community={community} />;
                         case 4:
                             return <Job canEdit={canEdit} community={community} editingMode={editingMode} />;
                         case 5:
