@@ -5,62 +5,79 @@ import NormalThemeCard from './NormalThemeCards';
 import { PublicRouteProps } from 'components/route/PublicRoute';
 import { RouteComponentProps } from 'react-router-dom';
 import { RouteParams } from 'components/route/types';
-import { useTypedSelector } from 'hooks/useTypedSelector';
 import { ContentContainer } from 'styles';
 import Loading from 'components/Loading';
 import { useFetch } from 'hooks';
 import { CommunityType } from 'store/types';
+import { useTranslation } from 'react-i18next';
 
 type CommunityProps = RouteComponentProps<RouteParams> & PublicRouteProps;
 
+export type Card = {
+    id: number;
+    title: string;
+};
+
 const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
+    const { t } = useTranslation('community');
     const { state, get } = useFetch<CommunityType>();
     const { data: community, isLoading } = state;
-    const { communities } = useTypedSelector((state) => state.communities);
-    const userInfos = communities?.data.find((community) => community.id === parseInt(match.params.id))?.user_infos;
-    const [selectedThemeCard, setSelectedThemeCard] = React.useState('');
+
+    const [selectedThemeCard, setSelectedThemeCard] = React.useState<Card>();
     const [editingMode, setEditingMode] = React.useState(false);
-    const role = userInfos?.role ? userInfos.role : '';
 
-    const [cardsTitle, setCardsTitle] = React.useState<string[]>([]);
+    const [cardsList, setCardsList] = React.useState<Card[]>([]);
+    const cards = [
+        { id: 1, title: t('location') },
+        { id: 2, title: t('team') },
+        { id: 3, title: t('workshop') },
+        { id: 4, title: t('job') },
+        { id: 5, title: t('product') },
+        { id: 6, title: t('project') },
+    ];
 
-    const generateCardsTitle = () => {
-        let cardsList = ['Location', 'Team'];
-        if (role === 'creator') {
-            cardsList = [...cardsList, 'Workshop', 'Job'];
-        } else if (community) {
-            if (community.has_workshops) {
-                cardsList.push('Workshop');
-            }
-            if (community.has_jobs) {
-                cardsList.push('Job');
+    const generateCardsList = () => {
+        if (community) {
+            let list = [...cards];
+            if (community.is_admin) {
+                setCardsList(list);
+            } else {
+                if (!community.has_workshops) {
+                    list = list.filter((card) => card.id != 3);
+                }
+                if (!community.has_jobs) {
+                    list = list.filter((card) => card.id != 4);
+                }
+                setCardsList(list);
             }
         }
-        setCardsTitle(cardsList);
     };
 
     React.useEffect(() => {
         get(`/communities/${match.params.id}`);
-    }, [match.params.id, communities]);
+    }, [match.params.id]);
 
     React.useEffect(() => {
         if (community) {
-            generateCardsTitle();
+            generateCardsList();
         }
     }, [community]);
 
-    const handleSelect = (title: string, editing: boolean) => {
-        if (selectedThemeCard === title && editingMode) {
+    const handleSelect = (id: number, editing: boolean) => {
+        if (selectedThemeCard?.id === id && editingMode) {
             setEditingMode(false);
         } else {
             setEditingMode(editing);
-            setSelectedThemeCard(title);
+            setSelectedThemeCard(cards.find((card) => card.id === id));
         }
     };
 
     const toggleEditingMode = () => {
         setEditingMode(!editingMode);
     };
+
+    console.log('community', community);
+    console.log('cardsList', cardsList);
 
     return (
         <>
@@ -97,19 +114,20 @@ const Community: React.FC<CommunityProps> = ({ match }: CommunityProps) => {
                             <WrapperSelected>
                                 <SelectedThemeCard
                                     community={community}
-                                    title={selectedThemeCard}
+                                    card={selectedThemeCard}
                                     editingMode={editingMode}
                                     toggleEditingMode={toggleEditingMode}
-                                    canEdit={role ? true : false}
+                                    canEdit={community?.is_admin}
                                 />
                             </WrapperSelected>
                         )}
                         <WrapperDefault>
-                            {cardsTitle?.map((title, index) => (
+                            {cardsList.map(({ id, title }) => (
                                 <NormalThemeCard
-                                    key={index}
+                                    key={id}
+                                    id={id}
                                     selectedThemeCard={selectedThemeCard}
-                                    canEdit={role ? true : false}
+                                    canEdit={community?.is_admin}
                                     handleSelect={handleSelect}
                                     title={title}
                                     editingMode={editingMode}

@@ -6,12 +6,12 @@ import MemberLine from './MemberLine';
 type TeamProps = {
     membersCount: number;
     creator: UserType;
-    moderators: UserType[];
-    members: UserType[];
+    // moderators: UserType[];
+    // members: UserType[];
     editingMode: boolean;
 };
 
-const Team: React.FC<TeamProps> = ({ membersCount, members, moderators, creator }: TeamProps) => {
+const Team: React.FC<TeamProps> = ({ membersCount, creator }: TeamProps) => {
     return (
         <>
             <p>Number of members : {membersCount}</p>
@@ -34,7 +34,7 @@ const Team: React.FC<TeamProps> = ({ membersCount, members, moderators, creator 
                     lastName={creator.last_name}
                     position="Creator"
                 />
-                {moderators.map((moderator) => (
+                {/* {moderators.map((moderator) => (
                     <MemberLine
                         key={moderator.id}
                         id={moderator.id}
@@ -53,7 +53,7 @@ const Team: React.FC<TeamProps> = ({ membersCount, members, moderators, creator 
                         lastName={member.last_name}
                         position="Member"
                     />
-                ))}
+                ))} */}
             </GridContainer>
         </>
     );
